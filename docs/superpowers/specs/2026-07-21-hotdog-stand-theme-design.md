@@ -42,7 +42,7 @@ Allowed foreground-on-background combinations ONLY:
 - **White on red**
 - **Black on yellow**
 - **Yellow on black**
-- **Black on white** (inputs / text fields / code editor)
+- **Black on white** (code editor / syntax only — see input note below)
 
 Explicitly forbidden (these are the current file's offenders):
 
@@ -52,6 +52,24 @@ Explicitly forbidden (these are the current file's offenders):
 
 Any icon or text on a red surface is white (or yellow for active/accent
 emphasis); any icon or text on a yellow surface is black.
+
+**Accepted exception — active-state accents (formalized after review):**
+Active/on entity icons and state colors (`state-icon-active-color`,
+`state-on-color`, `state-<domain>-*`, `rgb-state-*`) are **yellow on the red
+surface** (~2.85:1). This is intentional and functional: inactive icons are
+white, so yellow is what distinguishes an *active* entity from an inactive one.
+Repainting them white would erase that distinction. Given the faithful-garish
+mandate and that the yellow is large/bold and clearly legible, this borderline
+pair is a deliberate, documented exception to the 4-pair rule — not a defect.
+
+**Input decision (revised after live verification):** inputs/text-fields/selects
+render **white text on a transparent (red-card) fill** with a white underline and
+black border — NOT black-on-white. Live audit showed HA 2026 draws field *value*
+text from the global (white) text token; pairing that with a white fill produced
+white-on-white, so the fill is transparent (red shows through) and text stays
+white — consistent with every other surface. The **code editor (CodeMirror) is
+the sole black-on-white surface** (`code-editor-background-color: white` + dark
+syntax), independent of the form-field tokens.
 
 ## Coverage — set every variable in each group so nothing falls back
 

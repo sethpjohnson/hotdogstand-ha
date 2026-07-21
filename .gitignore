@@ -1,2 +1,9 @@
 # Secrets — never commit the HA API token
 .env
+
+# Audit artifacts (local only)
+audit-*.png
+.playwright-mcp/
+
+# dex local task tracking
+.dex/
