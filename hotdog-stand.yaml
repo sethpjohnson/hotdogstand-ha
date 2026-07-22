@@ -306,10 +306,9 @@ hotdog-stand-theme:
   ha-control-switch-on-color: var(--hd-yellow)
   ha-control-switch-off-color: var(--hd-white)
   ha-control-switch-background-opacity: 1
-  # Flat: no subtle dark-red box behind tile-card icon buttons (icon sits
-  # directly on the red card, matching the flat garish look).
-  ha-control-button-background-color: transparent
-  ha-control-button-background-opacity: "0"
+  # (Tile/area control buttons are styled as Windows buttons via card-mod-card
+  # in section 18 — the ha-control-button component redefines its own vars on
+  # :host, so plain tokens here can't reach it.)
 
   # ---------------------------------------------------------------------------
   # 12. MENUS / DROPDOWNS  (red surface, white text)
@@ -647,3 +646,22 @@ hotdog-stand-theme:
     ".": |
       :host { font-family: var(--hd-font) !important; }
       ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
+  # Tile/area control buttons -> classic Windows 3.1 buttons: silver face, black
+  # icon, raised bevel (border:outset). The ha-control-button component redefines
+  # its color vars on :host, so plain theme tokens can't reach it — card-mod sets
+  # the host style directly (no shadow-pierce needed: outset border + host bg +
+  # the icon-color var flatten it, incl. the entity-colored 'on' light buttons).
+  # Applied per-card (card-mod-card runs on every card); the descent no-ops on
+  # cards without control-button features. May need updating after major HA
+  # dashboard DOM changes.
+  card-mod-card-yaml: |
+    "hui-card-features$":
+      "hui-card-feature$":
+        "*$":
+          ".": |
+            ha-control-button {
+              background: #C0C0C0 !important;
+              border: 2px outset #C0C0C0 !important;
+              --control-button-icon-color: #000000 !important;
+              --control-button-background-opacity: 0 !important;
+            }
