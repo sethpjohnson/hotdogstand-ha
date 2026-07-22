@@ -1,12 +1,16 @@
 # Hot Dog Stand — a Home Assistant theme 🌭
 
-Some people say the greatest interface color scheme ever created was shipped in Windows 3.1 by Microsoft in 1992. Now, this same theme can be used to control your home, on your mobile phone, on your desktop, in your home, at the ballpark, or even while visiting Costco. Anywhere you may encounter an actual hot dog, the Hot Dog Stand theme is there for you.
+Some people say the greatest interface color scheme ever created was shipped in Windows 3.1 by Microsoft in 1992. Now, this same theme can be used to control your home, on your mobile phone, on your desktop, in your home, at the ballpark, or even while visiting Costco. 
 
-## Why you would do this?
+Anywhere you may encounter an actual hot dog, the Hot Dog Stand theme is there for you.
 
-Some people may say "This looks horrible," and "my eyes are bleeding!" and "I love hot dogs!". Clearly, there's a high demand for hot dog stand colors and its simply shocking that Home Assistant doesn't provide this theme for users out of the box. 
+![The hotdog stand theme for Home Assistant. You may be happier not seeing this image.](/imgs/hotdogstandha.png)
 
-Well, no longer! 
+## Why? Why would you do this?
+
+Some people may say "This looks horrible," and others may say, "My eyes are bleeding!" but also many, many more say "I love hot dogs!". 
+
+There's clearly a high demand for hot dog stand colors and its simply shocking that Home Assistant doesn't provide this theme for users out of the box. This classic color scheme has been popular since last century and now it can be part of your modern home.
 
 ## What's in the box
 
