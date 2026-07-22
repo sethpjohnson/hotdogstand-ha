@@ -688,15 +688,40 @@ hotdog-stand-theme:
   #   * the "." key is CSS for the current root
   card-mod-theme: hotdog-stand-theme
 
-  # Thick single black rule under the black top title bar, separating it from the
-  # yellow desktop. Target ONLY .toolbar (not .header too) — bordering both drew
-  # a doubled line. card-mod-root styles the lovelace root shadow, where the
-  # header/toolbar live. (Config panels use a different header not reached here.)
+  # Top title bar (lovelace root shadow):
+  #   * thick single black rule under it — target ONLY .toolbar (not .header too,
+  #     which drew a doubled line).
+  #   * the top-right icon buttons (+ / search / assist / edit) -> grey beveled
+  #     Windows buttons (silver face, black icon, raised outset border, square),
+  #     with the modern round hover overlay removed. They are
+  #     ha-icon-button > ha-button > .button; style .button and its host icon.
+  # (Config panels use a different header not reached here.)
   card-mod-root-yaml: |
     ".": |
       .toolbar {
         border-bottom: 5px solid #000000 !important;
       }
+      .action-items ha-icon-button,
+      .toolbar ha-icon-button {
+        --icon-primary-color: #000000 !important;
+        color: #000000 !important;
+        margin: 0 3px !important;
+      }
+    "ha-icon-button$":
+      "ha-button$":
+        ".": |
+          .button {
+            background: #C0C0C0 !important;
+            border: 2px outset #C0C0C0 !important;
+            border-radius: 0 !important;
+            color: #000000 !important;
+            min-width: 40px !important;
+          }
+          .button:hover, .button:focus, .button:focus-visible {
+            background: #C0C0C0 !important;
+          }
+          .button:active { border-style: inset !important; }
+          .button::before, .button::after { display: none !important; background: none !important; }
 
   # Config-page search box gets a hard black border (the one high-value input a
   # variables-only theme cannot border — Material/Web-Awesome inputs hardcode
