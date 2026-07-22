@@ -623,6 +623,12 @@ hotdog-stand-theme:
   ha-fab-border-radius: "0"
   mdc-fab-border-radius: "0"
   ha-assist-chip-border-radius: "0"
+  # Square the "circle" + "pill" radii too: the profile avatar (ha-user-badge),
+  # the colored Settings-page icon tiles (ha-config-navigation-list), and count
+  # badges all use these. (The transient circular hover ripple on icon buttons
+  # is a hardcoded ha-button::after{border-radius:50%} that a token can't reach.)
+  ha-border-radius-circle: "0"
+  ha-border-radius-pill: "0"
 
   # card-mod: hard black box border on the config-page search box — the one
   # high-value input a variables-only theme cannot border (Material/Web-Awesome
