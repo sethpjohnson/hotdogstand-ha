@@ -28,8 +28,16 @@ hotdog-stand-theme:
   hd-red-dk: "#B00000"   # hover / pressed on red surfaces
   hd-grey: "#808080"     # disabled text / lines only
 
-  primary-font-family: "'Trebuchet MS', sans-serif"
-  paper-font-common-base_-_font-family: "'Trebuchet MS', sans-serif"
+  # Windows 3.1 "MS Sans Serif" look via the pixelated webfont (loaded document-
+  # wide by /local/hotdog-font.js — see frontend.extra_module_url). Falls back to
+  # real MS Sans Serif on Windows, then Tahoma/Geneva. Code stays monospace.
+  hd-font: "'Pixelated MS Sans Serif', 'MS Sans Serif', Tahoma, Geneva, sans-serif"
+  ha-font-family-body: var(--hd-font)
+  ha-font-family-heading: var(--hd-font)
+  ha-font-family-longform: var(--hd-font)
+  primary-font-family: var(--hd-font)
+  paper-font-common-base_-_font-family: var(--hd-font)
+  mdc-typography-font-family: var(--hd-font)
 
   # ---------------------------------------------------------------------------
   # 1. CORE INTERFACE COLORS
