@@ -306,8 +306,10 @@ hotdog-stand-theme:
   ha-control-switch-on-color: var(--hd-yellow)
   ha-control-switch-off-color: var(--hd-white)
   ha-control-switch-background-opacity: 1
-  ha-control-button-background-color: var(--hd-red-dk)
-  ha-control-button-background-opacity: 1
+  # Flat: no subtle dark-red box behind tile-card icon buttons (icon sits
+  # directly on the red card, matching the flat garish look).
+  ha-control-button-background-color: transparent
+  ha-control-button-background-opacity: "0"
 
   # ---------------------------------------------------------------------------
   # 12. MENUS / DROPDOWNS  (red surface, white text)
@@ -629,3 +631,14 @@ hotdog-stand-theme:
           "ha-input-search$":
             ".": |
               wa-input::part(base) { border: 2px solid #000000 !important; border-radius: 0 !important; }
+  # Sidebar (card-mod): HA hardcodes body{font-family:Roboto...} (not a
+  # variable) and the sidebar inherits it, so the theme's font vars don't reach
+  # it — force the pixel font on the sidebar host here. (The bundled font loader
+  # /local/hotdog-font.js also sets body{font-family} document-wide for all
+  # other chrome; this covers the sidebar instantly on theme reload.)
+  # Also kill the subtle yellow tint overlay on the selected item (low-opacity
+  # ::before) — the selected item stays obvious via its yellow text + icon.
+  card-mod-sidebar-yaml: |
+    ".": |
+      :host { font-family: var(--hd-font) !important; }
+      ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
