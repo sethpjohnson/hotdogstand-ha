@@ -4,7 +4,7 @@ Some people say the greatest interface color scheme ever created was shipped in 
 
 Anywhere you may encounter an actual hot dog, the Hot Dog Stand theme is there for you.
 
-![The hotdog stand theme for Home Assistant. You may be happier not seeing this image.](/imgs/hotdogstandha.png)
+![The hotdog stand theme for Home Assistant. You may be happier not seeing this image.](imgs/hotdogstandha.png)
 
 ## Why? Why would you do this?
 

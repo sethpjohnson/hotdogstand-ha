@@ -9,5 +9,7 @@ CLAUDE.md
 # Browser-audit artifacts (screenshots, page snapshots, console logs)
 .playwright-mcp/
 *.png
-# ...but the theme ships real assets under www/, keep those
+# ...but the theme ships real assets under www/, and the README hero lives in
+# imgs/ — keep those
 !www/**/*.png
+!imgs/**/*.png
