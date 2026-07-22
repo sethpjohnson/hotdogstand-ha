@@ -56,3 +56,63 @@
   setTimeout(run, 500);
   setInterval(run, 3000);
 })();
+
+// Hot Dog Stand theme — make EVERY ha-button / ha-icon-button a grey Windows 3.1
+// button, no matter how deeply it is nested (overflow menus, integration cards,
+// sub-page headers, dialogs...). card-mod can only reach buttons whose exact
+// shadow path is enumerated; this styles them all by adopting one shared
+// stylesheet into every shadow root (ha-button's inner element is `.button`).
+// Also recolors the "active filters" notice from the theme's dark-red hover
+// tint (#B00000) to the correct pure red.
+(function () {
+  var css =
+    /* grey beveled Windows button, square, black label/icon */
+    ".button{background:#C0C0C0 !important;border:2px outset #C0C0C0 !important;" +
+    "border-radius:0 !important;color:#000000 !important;}" +
+    ".button:hover,.button:focus,.button:focus-visible{background:#C0C0C0 !important;}" +
+    ".button:active{border-style:inset !important;}" +
+    /* remove the modern round hover/ripple overlay */
+    ".button::before,.button::after{display:none !important;background:none !important;}" +
+    /* filter-count notice -> correct red, white text */
+    ".active-filters{background:#FF0000 !important;color:#FFFFFF !important;}" +
+    /* dropdown/menu item highlight: Web Awesome sets the hover/selected bg to
+       --wa-color-neutral-fill-normal (black in this theme) under black text ->
+       black-on-black. Force a red highlight bar with white text instead. */
+    "ha-dropdown-item:hover,ha-dropdown-item:focus,ha-dropdown-item:focus-visible," +
+    "ha-dropdown-item[selected],ha-dropdown-item:where([state-submenu-open]){" +
+    "background-color:#FF0000 !important;color:#FFFFFF !important;}";
+  var sheet;
+  try {
+    sheet = new CSSStyleSheet();
+    sheet.replaceSync(css);
+  } catch (e) {
+    return; // no constructable-stylesheet support -> skip (theme still works)
+  }
+  function adopt(sr) {
+    try {
+      if (sr && sr.adoptedStyleSheets && sr.adoptedStyleSheets.indexOf(sheet) === -1) {
+        sr.adoptedStyleSheets = sr.adoptedStyleSheets.concat(sheet);
+      }
+    } catch (e) {}
+  }
+  // Catch every shadow root created from now on (covers dynamically-added
+  // buttons — cards expanding, dialogs opening, menus, etc.).
+  try {
+    var orig = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function (init) {
+      var sr = orig.call(this, init);
+      adopt(sr);
+      return sr;
+    };
+  } catch (e) {}
+  // Retro-adopt into shadow roots that already existed before this ran.
+  function retro(node, depth) {
+    if (!node || depth > 25) return;
+    if (node.shadowRoot) { adopt(node.shadowRoot); retro(node.shadowRoot, depth + 1); }
+    var k = node.children;
+    if (k) for (var i = 0; i < k.length; i++) retro(k[i], depth + 1);
+  }
+  function run() { try { retro(document.body, 0); } catch (e) {} }
+  setTimeout(run, 500);
+  window.addEventListener("location-changed", function () { setTimeout(run, 150); });
+})();
