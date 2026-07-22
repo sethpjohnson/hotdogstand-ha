@@ -642,6 +642,15 @@ hotdog-stand-theme:
           "ha-input-search$":
             ".": |
               wa-input::part(base) { border: 2px solid #000000 !important; border-radius: 0 !important; }
+      "ha-config-flow-card$":
+        "ha-button$":
+          ".": |
+            .button {
+              background: #C0C0C0 !important;
+              color: #000000 !important;
+              border: 2px outset #C0C0C0 !important;
+              border-radius: 0 !important;
+            }
   # Sidebar (card-mod): HA hardcodes body{font-family:Roboto...} (not a
   # variable) and the sidebar inherits it, so the theme's font vars don't reach
   # it — force the pixel font on the sidebar host here. (The bundled font loader
