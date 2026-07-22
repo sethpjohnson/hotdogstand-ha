@@ -353,7 +353,12 @@ hotdog-stand-theme:
   #     so tokens stay distinguishable AND legible on the white code surface.
   # ---------------------------------------------------------------------------
   code-editor-background-color: var(--hd-white)
-  markdown-code-background-color: var(--hd-white)
+  # Inline <code> / highlight chips (markdown, HACS version + install-path
+  # boxes, etc.) must be BLACK, not white: their text inherits the surrounding
+  # white-on-red color, so a white chip background is white-on-white. Black chip
+  # + inherited white text is readable. (The code EDITOR above stays white — it
+  # sets its own dark syntax colors via the codemirror-* tokens below.)
+  markdown-code-background-color: var(--hd-black)
   code-editor-gutter-color: var(--hd-white)
   codemirror-gutters-background-color: var(--hd-white)
   codemirror-linenumber-color: var(--hd-grey)
