@@ -1,16 +1,13 @@
-# Secrets — never commit the HA API token
+# Secrets — the HA long-lived token lives here, never commit it
 .env
 
-# Audit artifacts (local only)
-audit-*.png
-.playwright-mcp/
-
-# dex local task tracking
+# Local dev tooling / task tracking
+.claude/
 .dex/
-boxbuild-*.png
-box-*.png
-verify-*.png
+CLAUDE.md
 
-# all local audit screenshots
+# Browser-audit artifacts (screenshots, page snapshots, console logs)
+.playwright-mcp/
 *.png
+# ...but the theme ships real assets under www/, keep those
 !www/**/*.png
