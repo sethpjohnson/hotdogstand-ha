@@ -578,3 +578,41 @@ hotdog-stand-theme:
   ha-switch-checked-thumb-background-color: var(--hd-black)
   ha-switch-checked-thumb-border-color: var(--hd-black)
   ha-switch-checked-border-color: var(--hd-black)
+
+  # ===========================================================================
+  # 18. BOXY INPUTS  (classic Hot Dog Stand look — square corners + search box)
+  # ===========================================================================
+  # Square corners everywhere via plain variables (robust; these cascade into
+  # shadow DOM). Win 3.1 controls were hard rectangles, never rounded.
+  ha-border-radius-sm: "0"
+  ha-border-radius-md: "0"
+  ha-border-radius-lg: "0"
+  ha-border-radius-xl: "0"
+  wa-border-radius-s: "0"
+  wa-border-radius-m: "0"
+  wa-border-radius-l: "0"
+  wa-form-control-border-radius: "0"
+  wa-panel-border-radius: "0"
+  mdc-shape-small: "0"
+  mdc-shape-medium: "0"
+  mdc-shape-large: "0"
+  ha-input-search-border-radius: "0"
+
+  # card-mod: hard black box border on the config-page search box — the one
+  # high-value input a variables-only theme cannot border (Material/Web-Awesome
+  # inputs hardcode border:none). Requires card-mod installed as a FRONTEND
+  # MODULE (configuration.yaml -> frontend.extra_module_url).
+  #   * value MUST be a | STRING of card-mod YAML — a real YAML map => reload 500
+  #   * "$" descends into an element's shadow root; "*$" into all children
+  #   * border the INNER wa-input::part(base), not the host (host border hidden)
+  # Scope is deliberately minimal: text-field / picker / dialog pierces were
+  # dropped as too fragile (they break on HA frontend DOM changes) and pickers
+  # cannot be bordered at all (a card-mod 4.2.1 localize bug aborts the page).
+  card-mod-theme: hotdog-stand-theme
+  card-mod-config-yaml: |
+    "*$":
+      "hass-tabs-subpage-data-table$":
+        "ha-data-table$":
+          "ha-input-search$":
+            ".": |
+              wa-input::part(base) { border: 2px solid #000000 !important; border-radius: 0 !important; }

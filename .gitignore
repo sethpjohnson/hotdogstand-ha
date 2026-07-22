@@ -7,3 +7,6 @@ audit-*.png
 
 # dex local task tracking
 .dex/
+boxbuild-*.png
+box-*.png
+verify-*.png
