@@ -135,11 +135,16 @@ hotdog-stand-theme:
   ha-card-border-width: 5px
   ha-card-border-radius: 0px
   ha-card-box-shadow: none
-  ha-card-header-color: var(--hd-white)
+  # Header text defaults to BLACK (readable on the white card body everywhere).
+  # On LOVELACE cards, card-mod-card paints a red title-bar strip and forces the
+  # header text white (!important), so those read white-on-red. Non-lovelace
+  # cards (Profile / config settings rows) get no strip, so black-on-white keeps
+  # their titles legible (was white-on-white and invisible).
+  ha-card-header-color: var(--hd-black)
   ha-card-header-font-size: 24px
   ha-card-state-icon-color: var(--hd-black)
   paper-card-background-color: var(--hd-white)
-  paper-card-header-color: var(--hd-white)
+  paper-card-header-color: var(--hd-black)
   paper-listbox-background-color: var(--hd-white)
 
   # ---------------------------------------------------------------------------
@@ -725,9 +730,37 @@ hotdog-stand-theme:
 
   # Config-page search box gets a hard black border (the one high-value input a
   # variables-only theme cannot border — Material/Web-Awesome inputs hardcode
-  # border:none). Config "Add / Ignore" buttons -> grey Windows buttons.
+  # border:none). Config "Add / Ignore" buttons -> grey Windows buttons. The
+  # Settings top-bar icon buttons (back / overflow / action icons, slotted into
+  # ha-top-app-bar-fixed) -> grey Windows buttons too, matching the lovelace
+  # header (card-mod-root can't reach the config panel).
+  # NOTE: the Settings/Profile top bar is blacked out by /local/hotdog-font.js
+  # (it sets --sidebar-background-color on the ha-panel-config/-profile hosts) —
+  # NOT here: a card-mod-config `:host` override of --sidebar-background-color
+  # leaks up and turns the real sidebar black (its root is above ha-sidebar).
   card-mod-config-yaml: |
     "*$":
+      ".": |
+        ha-top-app-bar-fixed ha-icon-button {
+          --icon-primary-color: #000000 !important;
+          color: #000000 !important;
+          margin: 0 3px !important;
+        }
+      "ha-icon-button$":
+        "ha-button$":
+          ".": |
+            .button {
+              background: #C0C0C0 !important;
+              border: 2px outset #C0C0C0 !important;
+              border-radius: 0 !important;
+              color: #000000 !important;
+              min-width: 40px !important;
+            }
+            .button:hover, .button:focus, .button:focus-visible {
+              background: #C0C0C0 !important;
+            }
+            .button:active { border-style: inset !important; }
+            .button::before, .button::after { display: none !important; background: none !important; }
       "hass-tabs-subpage-data-table$":
         "ha-data-table$":
           "ha-input-search$":
@@ -772,11 +805,32 @@ hotdog-stand-theme:
         background: #000000 !important;
         border-bottom: 5px solid #000000 !important;
       }
+      /* Hamburger (and any sidebar icon button) -> grey Windows button, black
+         icon — matches the header buttons. */
+      ha-icon-button {
+        --icon-primary-color: #000000 !important;
+        color: #000000 !important;
+      }
       ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
       ha-list-item-button {
         --ha-list-item-focus-background: transparent !important;
         --ha-ripple-color: transparent !important;
       }
+    "ha-icon-button$":
+      "ha-button$":
+        ".": |
+          .button {
+            background: #C0C0C0 !important;
+            border: 2px outset #C0C0C0 !important;
+            border-radius: 0 !important;
+            color: #000000 !important;
+            min-width: 40px !important;
+          }
+          .button:hover, .button:focus, .button:focus-visible {
+            background: #C0C0C0 !important;
+          }
+          .button:active { border-style: inset !important; }
+          .button::before, .button::after { display: none !important; background: none !important; }
   # Per-card styling (card-mod-card runs on every card):
   #   1. The card HEADER becomes a classic red Windows title bar — red strip,
   #      white text, black bottom rule dividing it from the yellow body. Targets
