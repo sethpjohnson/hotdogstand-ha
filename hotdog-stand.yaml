@@ -651,6 +651,16 @@ hotdog-stand-theme:
               border: 2px outset #C0C0C0 !important;
               border-radius: 0 !important;
             }
+  # Dialog action buttons (OK / Cancel / Submit / Save) -> Windows buttons too.
+  card-mod-dialog-yaml: |
+    "ha-button$":
+      ".": |
+        .button {
+          background: #C0C0C0 !important;
+          color: #000000 !important;
+          border: 2px outset #C0C0C0 !important;
+          border-radius: 0 !important;
+        }
   # Sidebar (card-mod): HA hardcodes body{font-family:Roboto...} (not a
   # variable) and the sidebar inherits it, so the theme's font vars don't reach
   # it — force the pixel font on the sidebar host here. (The bundled font loader
