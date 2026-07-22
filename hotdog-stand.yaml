@@ -34,7 +34,12 @@ hotdog-stand-theme:
   # ---------------------------------------------------------------------------
   # 1. CORE INTERFACE COLORS
   # ---------------------------------------------------------------------------
-  primary-color: var(--hd-red)
+  # primary-color must be YELLOW, not red: ha-tab (config sub-page tabs), text
+  # links, and spinners all draw themselves in --primary-color directly, and on
+  # the red surface red-on-red is invisible (the active tab vanished). Yellow is
+  # the accent and reads on red. The FAB/primary buttons that use it as a
+  # background pair it with a dark on-color, so this stays legible.
+  primary-color: var(--hd-yellow)
   dark-primary-color: var(--hd-red-dk)
   light-primary-color: var(--hd-yellow)
   accent-color: var(--hd-yellow)
