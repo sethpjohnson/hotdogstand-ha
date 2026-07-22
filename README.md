@@ -25,14 +25,14 @@ The short version:
 
 Two optional add-ons ([card-mod](https://github.com/thomasloven/lovelace-card-mod) and the font loader) add square inputs, the red title bars, the gray buttons, and the bitmap font. 
 
-Without them the theme still works and is still, unmistakably and unapoligetically, a hot dog stand.
+Without them the theme still works and is still, unmistakably and unapologetically, a hot dog stand.
 
 ## Deliberate design decisions that are not bugs
 
 - No hover animations. No ripples. No fades. You touch a thing, the thing changes. Windows 3.1 held no opinions about "delight" and neither do we.
 - The code editor keeps its syntax colors. 
 - Switches, sliders, chips, badges, toasts all live in the palette. On is yellow-on-black. Off is a little gray box. You will always know which.
-- It is not subtle. This is the way. 
+- It is not subtle. This is just how it is. 
 
 ## Caveats
 
@@ -42,7 +42,7 @@ Without them the theme still works and is still, unmistakably and unapoligetical
 ## Credits
 
 - The bitmap font comes from [98.css](https://github.com/jdan/98.css) by Jordan Scales (MIT). 
-- The color scheme comes from Microsoft, who have never publicly explained themselves except this [one article](https://www.pcgamer.com/software/windows/windows-3-1-included-a-red-and-yellow-hot-dog-stand-color-scheme-so-garish-it-was-long-assumed-to-be-a-joke-so-i-tracked-down-the-original-designer-to-get-the-true-story/) where their first interface designer said Hot Dot Stand was not a joke but they shipped it because they knew people using Windows may want an ugly UI. I may be paraphrasing here. 
+- The color scheme comes from Microsoft, who have never publicly explained themselves except this [one article](https://www.pcgamer.com/software/windows/windows-3-1-included-a-red-and-yellow-hot-dog-stand-color-scheme-so-garish-it-was-long-assumed-to-be-a-joke-so-i-tracked-down-the-original-designer-to-get-the-true-story/) where their first interface designer said Hot Dot Stand was not a joke, but they shipped it because they knew people using Windows may want an ugly UI. I may be paraphrasing here. 
 - Card piercing is powered by [card-mod](https://github.com/thomasloven/lovelace-card-mod).
 - Claude Code because who is going to have time to do all this in 2026 by hand.
 

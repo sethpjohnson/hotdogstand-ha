@@ -4,11 +4,10 @@ Target: Home Assistant 2026.7+. Everything below lives on your HA config volume 
 
 There are three pieces:
 
-1. **The theme** (required) recolors the entire frontend on its own.
-2. **card-mod** (recommended) adds the red card title bars, black window frames, square inputs, and gray buttons in forms.
-3. **The font/button loader** (recommended) adds the bitmap font and finishes the buttons and title bars that a theme file can't reach.
+1. The theme (required) recolors the entire frontend on its own.
+2. `card-mod` (recommended) adds the red card title bars, black window frames, square inputs, and gray buttons in forms.
+3. The font/button loader (recommended) adds the bitmap font and finishes the buttons and title bars that a theme file can't reach.
 
-For the look in the README, install all three.
 
 ## 1. Theme (required)
 
@@ -25,14 +24,14 @@ frontend:
   themes: !include_dir_merge_named themes
 ```
 
-Reload with Developer Tools → YAML → **Themes**, then pick `hotdog-stand-theme` in your Profile. That alone recolors the entire frontend.
+Reload with Developer Tools → YAML → Themes, then pick `hotdog-stand-theme` in your Profile. Et volia. 
 
 ## 2. card-mod (recommended)
 
-card-mod pierces shadow DOM so the theme can style things HA hardcodes. With it you get the red card **title bars**, the black window frames on cards, square input borders, the gray Windows buttons in config and dialog forms, the sidebar font and frame, and the tile control buttons.
+`card-mod` pierces shadow DOM so the theme can style things HA hardcodes. With it you get the red card title bars, the black window frames on cards, square input borders, the gray Windows buttons in config and dialog forms, the sidebar font and frame, and the tile control buttons. You realy want this.
 
-1. Install **card-mod** via HACS (Frontend → search "card-mod").
-2. Load it as a **frontend module** (this is what lets a theme reach non-Lovelace panels like Settings):
+1. Install `card-mod` via HACS (Frontend → search "card-mod").
+2. Load it as a frontend module (this is what lets a theme reach non-Lovelace panels like Settings):
 
    ```yaml
    frontend:
@@ -40,14 +39,14 @@ card-mod pierces shadow DOM so the theme can style things HA hardcodes. With it 
        - /hacsfiles/lovelace-card-mod/card-mod.js?hacstag=<your-hacstag>
    ```
 
-   Find your exact `hacstag` under Settings → Dashboards → ⋮ → Resources.
+   Note: Find your exact `hacstag` under Settings → Dashboards → ⋮ → Resources.
 3. Restart HA.
 
-Without card-mod the theme still works; the `card-mod-*` keys in the YAML are simply inert, so you lose the title bars and a few button treatments.
+Without `card-mod` the theme still works; the `card-mod-*` keys in the YAML are simply inert, so you lose the title bars and a few button treatments. But why? You've already committed this far. Keep going. Do it. 
 
 ## 3. Font + button loader (recommended)
 
-`hotdog-font.js` does two jobs. It installs the bitmap "MS Sans Serif" font document-wide, and it walks the shadow DOM to finish the parts card-mod can't address by path: every deeply nested button becomes a gray Windows button, the Settings and Profile title bars turn black, and the dropdown-menu hover state gets a readable red highlight.
+`hotdog-font.js` does two jobs. It installs the bitmap "MS Sans Serif" font document-wide, and it walks the shadow DOM to finish the parts `card-mod` can't address by path. You really, really want this too.
 
 1. Copy these into the config `www` folder (served at `/local/`):
 
@@ -68,9 +67,11 @@ Without card-mod the theme still works; the `card-mod-*` keys in the YAML are si
 
 3. Restart HA, then hard-refresh the browser (Cmd/Ctrl+Shift+R). Browsers cache `extra_module_url` scripts, so after any change to `hotdog-font.js` you need a hard refresh, or bump a version query (`/local/hotdog-font.js?v=2`).
 
-Without the loader, the font falls back to a real MS Sans Serif on Windows, then Tahoma/Geneva/sans-serif, and the deep buttons keep their default styling. The font is "Pixelated MS Sans Serif" from [98.css](https://github.com/jdan/98.css) (MIT).
+Without the loader, the font falls back to a real MS Sans Serif on Windows, then Tahoma/Geneva/sans-serif, and the deep buttons keep their default styling. 
+
+The font is "Pixelated MS Sans Serif" from [98.css](https://github.com/jdan/98.css) (MIT). Amazing work here.
 
 ## Notes
 
-- Web Awesome dropdown *pickers* (Profile Language/Theme, Time zone) get square corners but not a hard border. Trying to border them trips a card-mod bug that aborts the page render.
+- Web Awesome dropdown *pickers* (Profile Language/Theme, Time zone) get square corners but not a hard border. Trying to border them trips a card-mod bug.
 - If a corner of the UI reverts to gray-and-blue after an HA update, the shadow-DOM paths likely moved. The `card-mod-*` blocks in the YAML and the selectors in `hotdog-font.js` are where to adjust.
