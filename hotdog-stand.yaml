@@ -597,6 +597,15 @@ hotdog-stand-theme:
   ha-switch-checked-thumb-background-color: var(--hd-black)
   ha-switch-checked-thumb-border-color: var(--hd-black)
   ha-switch-checked-border-color: var(--hd-black)
+  # OFF state: black track + white thumb (high contrast on the red card). The
+  # default off track was near-white (#f3f3f3) with a white thumb — washed out.
+  ha-switch-background-color: var(--hd-black)
+  ha-switch-background-color-hover: "#1A1A1A"
+  ha-switch-thumb-background-color: var(--hd-white)
+  ha-switch-thumb-border-color: var(--hd-black)
+  # DISABLED: dim it so disabled toggles are visually distinct from off (default
+  # gave them no dimming, so disabled looked identical to a normal off switch).
+  ha-switch-disabled-opacity: "0.45"
 
   # ===========================================================================
   # 18. BOXY INPUTS  (classic Hot Dog Stand look — square corners + search box)
