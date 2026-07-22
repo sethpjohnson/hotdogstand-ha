@@ -10,3 +10,7 @@ audit-*.png
 boxbuild-*.png
 box-*.png
 verify-*.png
+
+# all local audit screenshots
+*.png
+!www/**/*.png
