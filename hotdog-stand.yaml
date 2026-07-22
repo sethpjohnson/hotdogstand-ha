@@ -674,10 +674,18 @@ hotdog-stand-theme:
   # other chrome; this covers the sidebar instantly on theme reload.)
   # Also kill the subtle yellow tint overlay on the selected item (low-opacity
   # ::before) — the selected item stays obvious via its yellow text + icon.
+  # And flatten the hover/focus background changes: null the ripple/hover state
+  # layer (--ha-ripple-color) and the focus fill (--ha-list-item-focus-background)
+  # so menu items don't get a background wash — the yellow focus OUTLINE stays
+  # (that's --ha-color-focus, untouched).
   card-mod-sidebar-yaml: |
     ".": |
       :host { font-family: var(--hd-font) !important; }
       ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
+      ha-list-item-button {
+        --ha-list-item-focus-background: transparent !important;
+        --ha-ripple-color: transparent !important;
+      }
   # Tile/area control buttons -> classic Windows 3.1 buttons: silver face, black
   # icon, raised bevel (border:outset). The ha-control-button component redefines
   # its color vars on :host, so plain theme tokens can't reach it — card-mod sets
