@@ -616,6 +616,13 @@ hotdog-stand-theme:
   mdc-shape-medium: "0"
   mdc-shape-large: "0"
   ha-input-search-border-radius: "0"
+  # ha-button / ha-fab / chips override the shared radius on their own :host to
+  # var(--ha-border-radius-pill) (9999px), so they need their specific tokens
+  # squared (the "Add" buttons + the "Add integration" FAB were pills).
+  ha-button-border-radius: "0"
+  ha-fab-border-radius: "0"
+  mdc-fab-border-radius: "0"
+  ha-assist-chip-border-radius: "0"
 
   # card-mod: hard black box border on the config-page search box — the one
   # high-value input a variables-only theme cannot border (Material/Web-Awesome
