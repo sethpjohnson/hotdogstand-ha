@@ -5,15 +5,28 @@
 #  Loud red / yellow / black. Single flat theme (no light/dark modes) so it
 #  looks identically garish regardless of the viewer's system setting.
 #
-#  THE CONTRAST RULE (enforced on every foreground/background pairing):
-#    Allowed ONLY:  white-on-red · black-on-yellow · yellow-on-black ·
-#                   black-on-white (inputs / text-fields / code editor).
-#    Forbidden:     white-on-yellow · yellow-on-red* · black-on-red.
-#    (*yellow-on-red is used ONLY as deliberate active/accent emphasis and for
-#     status colors, per the design spec — never for body text.)
+#  YELLOW-DOMINANT layout (matches the real scheme — the desktop and window
+#  client areas were yellow; red was the chrome/title-bar accent):
+#    * PAGE + CARD BODIES  -> yellow   (text/icons -> BLACK)
+#    * CHROME: app header, sidebar, card TITLE BARS -> red (text -> WHITE;
+#      yellow for the active tab/selection accent)
+#    * INVERSE: toasts / tooltips / chips / badges -> black (text -> YELLOW)
+#    * DROPDOWN MENUS -> white (text -> BLACK; selected row = red bar, white)
+#    * INPUTS -> transparent on the yellow body, BLACK ink, hard BLACK border
 #
-#  Rule of thumb: any text/icon on a RED surface -> white (yellow if active);
-#                 any text/icon on a YELLOW surface -> black.
+#  THE CONTRAST RULE (enforced on every foreground/background pairing):
+#    Allowed ONLY:  black-on-yellow · white-on-red · yellow-on-black ·
+#                   black-on-white (menus / inputs / code editor).
+#    Forbidden:     white-on-yellow · yellow-on-red* · black-on-red · red-on-red.
+#    (*yellow-on-red is used ONLY as deliberate active/accent emphasis on the
+#     red chrome — never for body text.)
+#
+#  Rule of thumb: any text/icon on a YELLOW surface -> black;
+#                 any text/icon on a RED surface   -> white (yellow if active);
+#                 any text/icon on a BLACK surface  -> yellow.
+#
+#  Windows 3.1 had no drop shadows -> cards are FLAT (no box-shadow), framed by a
+#  thick 5px black border (the "active window" look) with a red title bar.
 # =============================================================================
 
 hotdog-stand-theme:
@@ -21,11 +34,17 @@ hotdog-stand-theme:
   # ---------------------------------------------------------------------------
   # 0. BASE PALETTE TOKENS  (define once, reference via var(--hd-*) everywhere)
   # ---------------------------------------------------------------------------
-  hd-red: "#FF0000"      # primary surface / background
-  hd-yellow: "#FFD700"   # accent / active / selected
-  hd-black: "#000000"    # borders; text on yellow
-  hd-white: "#FFFFFF"    # text on red; input fill
-  hd-red-dk: "#B00000"   # hover / pressed on red surfaces
+  # Colors sampled from the real Windows 3.1 "Hot Dog Stand" scheme: the window
+  # body/desktop is PURE yellow (#FFFF00, not gold) and the chrome is pure red.
+  hd-red: "#FF0000"      # chrome / accent / active-window title bars
+  hd-yellow: "#FFFF00"   # primary surface / background / body (pure, not gold)
+  hd-black: "#000000"    # borders; text on yellow; inverse surface
+  hd-white: "#FFFFFF"    # text on red; menu/input surface
+  hd-red-dk: "#B00000"   # hover / pressed on red chrome
+  # Yellow surfaces do NOT darken on hover/pressed — a hover tint is a modern
+  # convention, not part of the original scheme. This equals the base yellow so
+  # every "hover/pressed/dim" yellow reference stays flat #FFFF00.
+  hd-yellow-dk: "#FFFF00"
   hd-grey: "#808080"     # disabled text / lines only
 
   # Windows 3.1 "MS Sans Serif" look via the pixelated webfont (loaded document-
@@ -42,14 +61,15 @@ hotdog-stand-theme:
   # ---------------------------------------------------------------------------
   # 1. CORE INTERFACE COLORS
   # ---------------------------------------------------------------------------
-  # primary-color must be YELLOW, not red: ha-tab (config sub-page tabs), text
-  # links, and spinners all draw themselves in --primary-color directly, and on
-  # the red surface red-on-red is invisible (the active tab vanished). Yellow is
-  # the accent and reads on red. The FAB/primary buttons that use it as a
-  # background pair it with a dark on-color, so this stays legible.
-  primary-color: var(--hd-yellow)
+  # primary-color must be RED, not yellow: ha-tab, text links, and spinners draw
+  # themselves in --primary-color directly, and on the now-YELLOW body a
+  # yellow-on-yellow accent is invisible. Red reads on yellow. On the red chrome
+  # (header toolbar) the tab accents are handled by the yellow ha-tab-active /
+  # app-header-selection tokens instead, so red primary-color never lands
+  # red-on-red there.
+  primary-color: var(--hd-red)
   dark-primary-color: var(--hd-red-dk)
-  light-primary-color: var(--hd-yellow)
+  light-primary-color: var(--hd-red)
   accent-color: var(--hd-yellow)
   divider-color: var(--hd-black)
   disabled-color: var(--hd-grey)
@@ -57,57 +77,61 @@ hotdog-stand-theme:
   scrollbar-thumb-color: var(--hd-black)
 
   # ---------------------------------------------------------------------------
-  # 2. TEXT COLORS  (default surface is red -> white text)
+  # 2. TEXT COLORS  (default surface is now yellow -> black text)
   # ---------------------------------------------------------------------------
-  primary-text-color: var(--hd-white)
-  secondary-text-color: var(--hd-white)
-  text-primary-color: var(--hd-white)         # text drawn on the primary color
+  primary-text-color: var(--hd-black)
+  secondary-text-color: var(--hd-black)
+  text-primary-color: var(--hd-white)         # text drawn ON the primary (red)
   text-light-primary-color: var(--hd-black)   # dark text variant (on light bg)
-  text-medium-emphasis-color: var(--hd-white)
+  text-medium-emphasis-color: var(--hd-black)
 
   # ---------------------------------------------------------------------------
-  # 3. BACKGROUNDS
+  # 3. BACKGROUNDS  (all yellow — the desktop + window client areas)
   # ---------------------------------------------------------------------------
-  primary-background-color: var(--hd-red)
-  secondary-background-color: var(--hd-red)
-  card-background-color: var(--hd-red)
-  lovelace-background: var(--hd-red)
-  clear-background-color: var(--hd-red)
+  primary-background-color: var(--hd-yellow)
+  secondary-background-color: var(--hd-yellow)
+  card-background-color: var(--hd-yellow)
+  lovelace-background: var(--hd-yellow)
+  clear-background-color: var(--hd-yellow)
 
   # ---------------------------------------------------------------------------
-  # 4. STATUS COLORS  (must contrast with the red card surface: yellow / white)
+  # 4. STATUS COLORS  (foreground text/icon on the yellow card -> black)
   # ---------------------------------------------------------------------------
-  # Foreground text/icon colors -> white so they stay legible on the red surface
-  # (yellow-on-red is a forbidden low-contrast pair).
-  error-color: var(--hd-white)
-  warning-color: var(--hd-white)
-  success-color: var(--hd-white)
-  info-color: var(--hd-white)
+  # Foreground colors -> black so they stay legible on the yellow card surface
+  # (white-on-yellow is a forbidden low-contrast pair).
+  error-color: var(--hd-black)
+  warning-color: var(--hd-black)
+  success-color: var(--hd-black)
+  info-color: var(--hd-black)
   # The rgb-* variants only drive ha-alert's translucent background WASH (not the
-  # foreground) -> intentionally left yellow for a visible caution tint behind the
-  # white text. Do not "fix" these to white; they are not a text/fg pairing.
-  rgb-error-color: 255, 215, 0
-  rgb-warning-color: 255, 215, 0
-  rgb-success-color: 255, 255, 255
-  rgb-info-color: 255, 255, 255
+  # foreground) -> red wash gives a visible caution tint behind the black text on
+  # the yellow card. Not a text/fg pairing; do not "fix" these to black.
+  rgb-error-color: 255, 0, 0
+  rgb-warning-color: 255, 0, 0
+  rgb-success-color: 255, 0, 0
+  rgb-info-color: 255, 0, 0
 
   # ---------------------------------------------------------------------------
-  # 5. CARDS  (thick black border, no radius, hard retro shadow)
+  # 5. CARDS  (yellow body, thick black frame, NO shadow, red title bar)
   # ---------------------------------------------------------------------------
-  ha-card-background: var(--hd-red)
+  # Windows 3.1 had no drop shadows -> box-shadow: none (flat). The 5px black
+  # border is the "active window" thick frame. The red title-bar strip + its
+  # white header text are painted by card-mod-card (section 18); the header-color
+  # token below is the white text that sits on that red strip.
+  ha-card-background: var(--hd-yellow)
   ha-card-border-color: var(--hd-black)
   ha-card-border-width: 5px
   ha-card-border-radius: 0px
-  ha-card-box-shadow: 4px 4px 0px 0px var(--hd-black)
+  ha-card-box-shadow: none
   ha-card-header-color: var(--hd-white)
   ha-card-header-font-size: 24px
-  ha-card-state-icon-color: var(--hd-white)
-  paper-card-background-color: var(--hd-red)
+  ha-card-state-icon-color: var(--hd-black)
+  paper-card-background-color: var(--hd-yellow)
   paper-card-header-color: var(--hd-white)
-  paper-listbox-background-color: var(--hd-red)
+  paper-listbox-background-color: var(--hd-white)
 
   # ---------------------------------------------------------------------------
-  # 6. APP HEADER + VIEW TABS / TOOLBAR  (red bar, white text, yellow selection)
+  # 6. APP HEADER + VIEW TABS / TOOLBAR  (red chrome, white text, yellow active)
   # ---------------------------------------------------------------------------
   app-header-background-color: var(--hd-red)
   app-header-text-color: var(--hd-white)
@@ -117,14 +141,14 @@ hotdog-stand-theme:
   toolbar-background-color: var(--hd-red)
   header-height: 56px
 
-  # top view tabs (mwc/mdc tab bar)
+  # top view tabs (mwc/mdc tab bar) — on the red header: white text, yellow active
   mdc-tab-text-label-color-default: var(--hd-white)
   mdc-tab-color-default: var(--hd-white)
   ha-tab-active-text-color: var(--hd-yellow)
   ha-tab-indicator-color: var(--hd-yellow)
 
   # ---------------------------------------------------------------------------
-  # 7. SIDEBAR  (red panel; selected item = black tile with yellow icon/text)
+  # 7. SIDEBAR  (red chrome; selected item = black tile with yellow icon/text)
   # ---------------------------------------------------------------------------
   sidebar-background-color: var(--hd-red)
   sidebar-icon-color: var(--hd-white)
@@ -135,88 +159,89 @@ hotdog-stand-theme:
   sidebar-selected-text-color: var(--hd-yellow)
 
   # ---------------------------------------------------------------------------
-  # 8. STATE & DOMAIN ICON COLORS
-  #    Inactive icons on red -> white; active -> yellow; unavailable -> grey.
+  # 8. STATE & DOMAIN ICON COLORS  (icons sit on the yellow card body now)
+  #    Inactive icons on yellow -> black; active -> red; unavailable -> grey.
   # ---------------------------------------------------------------------------
-  state-icon-color: var(--hd-white)
-  state-icon-active-color: var(--hd-yellow)
+  state-icon-color: var(--hd-black)
+  state-icon-active-color: var(--hd-red)
   state-icon-unavailable-color: var(--hd-grey)
 
-  state-on-color: var(--hd-yellow)
-  state-off-color: var(--hd-white)
-  state-home-color: var(--hd-yellow)
-  state-not_home-color: var(--hd-white)
-  state-active-color: var(--hd-yellow)
+  state-on-color: var(--hd-red)
+  state-off-color: var(--hd-black)
+  state-home-color: var(--hd-red)
+  state-not_home-color: var(--hd-black)
+  state-active-color: var(--hd-red)
   state-unavailable-color: var(--hd-grey)
-  state-unknown-color: var(--hd-white)
-  state-idle-color: var(--hd-white)
+  state-unknown-color: var(--hd-black)
+  state-idle-color: var(--hd-black)
 
-  # climate state colors
-  state-climate-auto-color: var(--hd-yellow)
-  state-climate-eco-color: var(--hd-yellow)
-  state-climate-cool-color: var(--hd-yellow)
-  state-climate-heat-color: var(--hd-yellow)
-  state-climate-manual-color: var(--hd-yellow)
-  state-climate-off-color: var(--hd-white)
-  state-climate-fan_only-color: var(--hd-yellow)
-  state-climate-dry-color: var(--hd-yellow)
-  state-climate-idle-color: var(--hd-white)
+  # climate state colors (active modes -> red on yellow; off/idle -> black)
+  state-climate-auto-color: var(--hd-red)
+  state-climate-eco-color: var(--hd-red)
+  state-climate-cool-color: var(--hd-red)
+  state-climate-heat-color: var(--hd-red)
+  state-climate-manual-color: var(--hd-red)
+  state-climate-off-color: var(--hd-black)
+  state-climate-fan_only-color: var(--hd-red)
+  state-climate-dry-color: var(--hd-red)
+  state-climate-idle-color: var(--hd-black)
 
-  # per-domain entity RGB colors (active entities glow yellow across the UI)
-  rgb-state-default-color: 255, 215, 0
-  rgb-state-light-color: 255, 215, 0
-  rgb-state-switch-color: 255, 215, 0
-  rgb-state-fan-color: 255, 215, 0
-  rgb-state-cover-color: 255, 215, 0
-  rgb-state-climate-color: 255, 215, 0
-  rgb-state-entity-color: 255, 215, 0
-  rgb-state-binary-sensor-color: 255, 215, 0
-  rgb-state-sensor-color: 255, 215, 0
-  rgb-state-media-player-color: 255, 215, 0
-  rgb-state-remote-color: 255, 215, 0
-  rgb-state-script-color: 255, 215, 0
-  rgb-state-scene-color: 255, 215, 0
-  rgb-state-automation-color: 255, 215, 0
-  rgb-state-siren-color: 255, 215, 0
-  rgb-state-update-color: 255, 215, 0
-  rgb-state-vacuum-color: 255, 215, 0
-  rgb-state-humidifier-color: 255, 215, 0
-  rgb-state-lock-locked-color: 255, 215, 0
-  rgb-state-lock-unlocked-color: 255, 255, 255
-  rgb-state-lock-pending-color: 255, 255, 255
-  rgb-state-lock-jammed-color: 255, 215, 0
-  rgb-state-alarm-armed-color: 255, 215, 0
-  rgb-state-alarm-arming-color: 255, 215, 0
-  rgb-state-alarm-pending-color: 255, 255, 255
-  rgb-state-alarm-triggered-color: 255, 215, 0
-  rgb-state-alarm-disarmed-color: 255, 255, 255
-  rgb-state-person-home-color: 255, 215, 0
-  rgb-state-person-not-home-color: 255, 255, 255
-  rgb-state-person-zone-color: 255, 215, 0
+  # per-domain entity RGB colors (active entities glow RED on the yellow body;
+  # off / not-home / unlocked / disarmed states -> black)
+  rgb-state-default-color: 255, 0, 0
+  rgb-state-light-color: 255, 0, 0
+  rgb-state-switch-color: 255, 0, 0
+  rgb-state-fan-color: 255, 0, 0
+  rgb-state-cover-color: 255, 0, 0
+  rgb-state-climate-color: 255, 0, 0
+  rgb-state-entity-color: 255, 0, 0
+  rgb-state-binary-sensor-color: 255, 0, 0
+  rgb-state-sensor-color: 255, 0, 0
+  rgb-state-media-player-color: 255, 0, 0
+  rgb-state-remote-color: 255, 0, 0
+  rgb-state-script-color: 255, 0, 0
+  rgb-state-scene-color: 255, 0, 0
+  rgb-state-automation-color: 255, 0, 0
+  rgb-state-siren-color: 255, 0, 0
+  rgb-state-update-color: 255, 0, 0
+  rgb-state-vacuum-color: 255, 0, 0
+  rgb-state-humidifier-color: 255, 0, 0
+  rgb-state-lock-locked-color: 255, 0, 0
+  rgb-state-lock-unlocked-color: 0, 0, 0
+  rgb-state-lock-pending-color: 0, 0, 0
+  rgb-state-lock-jammed-color: 255, 0, 0
+  rgb-state-alarm-armed-color: 255, 0, 0
+  rgb-state-alarm-arming-color: 255, 0, 0
+  rgb-state-alarm-pending-color: 0, 0, 0
+  rgb-state-alarm-triggered-color: 255, 0, 0
+  rgb-state-alarm-disarmed-color: 0, 0, 0
+  rgb-state-person-home-color: 255, 0, 0
+  rgb-state-person-not-home-color: 0, 0, 0
+  rgb-state-person-zone-color: 255, 0, 0
 
   # generic rgb helpers a few cards read directly
   rgb-primary-color: 255, 0, 0
-  rgb-accent-color: 255, 215, 0
-  rgb-primary-text-color: 255, 255, 255
-  rgb-secondary-text-color: 255, 255, 255
-  rgb-text-primary-color: 255, 255, 255
-  rgb-card-background-color: 255, 0, 0
-  rgb-primary-background-color: 255, 0, 0
-  rgb-secondary-background-color: 255, 0, 0
+  rgb-accent-color: 255, 255, 0
+  rgb-primary-text-color: 0, 0, 0
+  rgb-secondary-text-color: 0, 0, 0
+  rgb-text-primary-color: 0, 0, 0
+  rgb-card-background-color: 255, 255, 0
+  rgb-primary-background-color: 255, 255, 0
+  rgb-secondary-background-color: 255, 255, 0
   rgb-disabled-text-color: 128, 128, 128
 
   # ---------------------------------------------------------------------------
-  # 9. INPUTS  (MDC text-field & select + legacy paper/input) -> black on white
+  # 9. INPUTS  (transparent on the yellow body -> BLACK ink, hard BLACK border)
   # ---------------------------------------------------------------------------
   # legacy input-*
   input-fill-color: transparent
   input-disabled-fill-color: transparent
-  input-ink-color: var(--hd-white)
-  input-label-ink-color: var(--hd-white)
-  input-disabled-ink-color: rgb(192,192,192)
-  input-idle-line-color: var(--hd-white)
-  input-hover-line-color: var(--hd-white)
-  input-disabled-line-color: rgb(192,192,192)
+  input-ink-color: var(--hd-black)
+  input-label-ink-color: var(--hd-black)
+  input-disabled-ink-color: var(--hd-grey)
+  input-idle-line-color: var(--hd-black)
+  input-hover-line-color: var(--hd-black)
+  input-disabled-line-color: var(--hd-grey)
   input-outlined-idle-border-color: var(--hd-black)
   input-outlined-hover-border-color: var(--hd-black)
   input-outlined-disabled-border-color: var(--hd-grey)
@@ -225,11 +250,11 @@ hotdog-stand-theme:
   # MDC text field
   mdc-text-field-fill-color: transparent
   mdc-text-field-disabled-fill-color: transparent
-  mdc-text-field-ink-color: var(--hd-white)
-  mdc-text-field-label-ink-color: var(--hd-white)
-  mdc-text-field-disabled-ink-color: rgb(192,192,192)
-  mdc-text-field-idle-line-color: var(--hd-white)
-  mdc-text-field-hover-line-color: var(--hd-white)
+  mdc-text-field-ink-color: var(--hd-black)
+  mdc-text-field-label-ink-color: var(--hd-black)
+  mdc-text-field-disabled-ink-color: var(--hd-grey)
+  mdc-text-field-idle-line-color: var(--hd-black)
+  mdc-text-field-hover-line-color: var(--hd-black)
   mdc-text-field-disabled-line-color: var(--hd-grey)
   mdc-text-field-outlined-idle-border-color: var(--hd-black)
   mdc-text-field-outlined-hover-border-color: var(--hd-black)
@@ -238,11 +263,11 @@ hotdog-stand-theme:
   # MDC select
   mdc-select-fill-color: transparent
   mdc-select-disabled-fill-color: transparent
-  mdc-select-ink-color: var(--hd-white)
-  mdc-select-label-ink-color: var(--hd-white)
-  mdc-select-disabled-ink-color: rgb(192,192,192)
-  mdc-select-idle-line-color: var(--hd-white)
-  mdc-select-hover-line-color: var(--hd-white)
+  mdc-select-ink-color: var(--hd-black)
+  mdc-select-label-ink-color: var(--hd-black)
+  mdc-select-disabled-ink-color: var(--hd-grey)
+  mdc-select-idle-line-color: var(--hd-black)
+  mdc-select-hover-line-color: var(--hd-black)
   mdc-select-dropdown-icon-color: var(--hd-black)
   mdc-select-disabled-dropdown-icon-color: var(--hd-grey)
   mdc-select-outlined-idle-border-color: var(--hd-black)
@@ -250,60 +275,63 @@ hotdog-stand-theme:
   mdc-select-outlined-disabled-border-color: var(--hd-grey)
 
   # legacy paper input
-  paper-input-container-color: var(--hd-white)
-  paper-input-container-focus-color: var(--hd-yellow)
-  paper-input-container-input-color: var(--hd-white)
-  paper-input-container-input: var(--hd-white)
-  paper-input-container-shared-input-style_-_color: var(--hd-white)
+  paper-input-container-color: var(--hd-black)
+  paper-input-container-focus-color: var(--hd-red)
+  paper-input-container-input-color: var(--hd-black)
+  paper-input-container-input: var(--hd-black)
+  paper-input-container-shared-input-style_-_color: var(--hd-black)
 
   # ---------------------------------------------------------------------------
-  # 10. DIALOGS / MORE-INFO  (red surface, white ink, black scrim)
+  # 10. DIALOGS / MORE-INFO  (yellow surface, black ink; red more-info header)
   # ---------------------------------------------------------------------------
-  mdc-dialog-heading-ink-color: var(--hd-white)
-  mdc-dialog-content-ink-color: var(--hd-white)
+  mdc-dialog-heading-ink-color: var(--hd-black)
+  mdc-dialog-content-ink-color: var(--hd-black)
   mdc-dialog-scroll-divider-color: var(--hd-black)
   mdc-dialog-scrim-color: rgba(0, 0, 0, 0.6)
   dialog-backdrop-filter: none
   ha-dialog-border-radius: 0px
-  ha-dialog-surface-background: var(--hd-red)
-  more-info-header-background: var(--hd-red-dk)
+  ha-dialog-surface-background: var(--hd-yellow)
+  more-info-header-background: var(--hd-red)
   more-info-header-color: var(--hd-white)
 
   # ---------------------------------------------------------------------------
-  # 11. SWITCHES / TOGGLES / SLIDERS  (all sit on red -> white/yellow/black)
+  # 11. SWITCHES / TOGGLES / SLIDERS  (sit on the yellow card body)
   # ---------------------------------------------------------------------------
+  # Switch ON  = black track + yellow thumb (filled, obvious).
+  # Switch OFF = white track + black thumb (empty box) — both read on yellow.
   switch-checked-color: var(--hd-yellow)
-  switch-checked-button-color: var(--hd-black)
-  switch-checked-track-color: var(--hd-yellow)
-  switch-unchecked-color: var(--hd-white)
-  switch-unchecked-button-color: var(--hd-white)
-  switch-unchecked-track-color: var(--hd-black)
+  switch-checked-button-color: var(--hd-yellow)
+  switch-checked-track-color: var(--hd-black)
+  switch-unchecked-color: var(--hd-black)
+  switch-unchecked-button-color: var(--hd-black)
+  switch-unchecked-track-color: var(--hd-white)
 
   paper-toggle-button-checked-button-color: var(--hd-yellow)
-  paper-toggle-button-checked-bar-color: var(--hd-white)
-  paper-toggle-button-unchecked-button-color: var(--hd-white)
-  paper-toggle-button-unchecked-bar-color: var(--hd-black)
+  paper-toggle-button-checked-bar-color: var(--hd-black)
+  paper-toggle-button-unchecked-button-color: var(--hd-black)
+  paper-toggle-button-unchecked-bar-color: var(--hd-white)
 
-  # ha-slider / md-slider / legacy paper-slider
-  ha-slider-color: var(--hd-yellow)
-  slider-color: var(--hd-yellow)
+  # ha-slider / md-slider / legacy paper-slider — black track (reads on yellow),
+  # red fill/knob (active accent on yellow).
+  ha-slider-color: var(--hd-red)
+  slider-color: var(--hd-red)
   slider-secondary-color: var(--hd-white)
   slider-track-color: var(--hd-black)
   slider-bar-color: var(--hd-black)
-  paper-slider-active-color: var(--hd-yellow)
+  paper-slider-active-color: var(--hd-red)
   paper-slider-secondary-color: var(--hd-white)
   paper-slider-container-color: var(--hd-black)
-  paper-slider-knob-color: var(--hd-yellow)
-  paper-slider-knob-start-color: var(--hd-yellow)
-  paper-slider-pin-color: var(--hd-yellow)        # pin bubble background
-  paper-slider-font-color: var(--hd-black)        # pin text (black on yellow)
+  paper-slider-knob-color: var(--hd-red)
+  paper-slider-knob-start-color: var(--hd-red)
+  paper-slider-pin-color: var(--hd-black)         # pin bubble background
+  paper-slider-font-color: var(--hd-yellow)       # pin text (yellow on black)
   paper-slider-disabled-active-color: var(--hd-grey)
 
   # ha-control-* (tile card buttons / sliders / switches)
-  ha-control-slider-color: var(--hd-yellow)
+  ha-control-slider-color: var(--hd-red)
   ha-control-slider-background: var(--hd-black)
   ha-control-slider-background-opacity: 1
-  ha-control-switch-on-color: var(--hd-yellow)
+  ha-control-switch-on-color: var(--hd-red)
   ha-control-switch-off-color: var(--hd-white)
   ha-control-switch-background-opacity: 1
   # (Tile/area control buttons are styled as Windows buttons via card-mod-card
@@ -311,19 +339,20 @@ hotdog-stand-theme:
   # :host, so plain tokens here can't reach it.)
 
   # ---------------------------------------------------------------------------
-  # 12. MENUS / DROPDOWNS  (red surface, white text)
+  # 12. MENUS / DROPDOWNS  (white list surface, black text — classic Win combo)
+  #     Selected/active row = red bar with white text (see md-sys containers).
   # ---------------------------------------------------------------------------
-  mdc-menu-surface-fill-color: var(--hd-red)
-  mdc-menu-ink-color: var(--hd-white)
-  paper-listbox-color: var(--hd-white)
-  paper-item-icon-color: var(--hd-white)
-  paper-item-icon-active-color: var(--hd-yellow)
-  paper-item-selected-background-color: var(--hd-black)
+  mdc-menu-surface-fill-color: var(--hd-white)
+  mdc-menu-ink-color: var(--hd-black)
+  paper-listbox-color: var(--hd-black)
+  paper-item-icon-color: var(--hd-black)
+  paper-item-icon-active-color: var(--hd-red)
+  paper-item-selected-background-color: var(--hd-red)
   paper-item-min-height: 40px
   ha-select-height: 56px
 
   # ---------------------------------------------------------------------------
-  # 13. CHIPS / BADGES / TOASTS
+  # 13. CHIPS / BADGES / TOASTS  (inverse: black tile, yellow text — pops on yellow)
   # ---------------------------------------------------------------------------
   # label badges: black pill, yellow text/border (yellow on black)
   label-badge-background-color: var(--hd-black)
@@ -339,7 +368,7 @@ hotdog-stand-theme:
   ha-chip-background-color: var(--hd-black)
   ha-chip-text-color: var(--hd-yellow)
   ha-assist-chip-container-color: var(--hd-black)
-  ha-assist-chip-active-container-color: var(--hd-yellow)
+  ha-assist-chip-active-container-color: var(--hd-red)
   ha-assist-chip-filled-container-color: var(--hd-black)
 
   # toast / snackbar -> inverse surface (black tile, yellow text)
@@ -352,17 +381,17 @@ hotdog-stand-theme:
   #     so tokens stay distinguishable AND legible on the white code surface.
   # ---------------------------------------------------------------------------
   code-editor-background-color: var(--hd-white)
-  # Inline <code> / highlight chips (markdown, HACS version + install-path
-  # boxes, etc.) must be BLACK, not white: their text inherits the surrounding
-  # white-on-red color, so a white chip background is white-on-white. Black chip
-  # + inherited white text is readable. (The code EDITOR above stays white — it
-  # sets its own dark syntax colors via the codemirror-* tokens below.)
-  markdown-code-background-color: var(--hd-black)
+  # Inline <code> / highlight chips (markdown, HACS version + install-path boxes,
+  # etc.) -> WHITE box: their text now inherits the surrounding BLACK body color
+  # (yellow card), so a white chip background gives readable black-on-white. (The
+  # code EDITOR above stays white too — it sets its own dark syntax colors via
+  # the codemirror-* tokens below.)
+  markdown-code-background-color: var(--hd-white)
   code-editor-gutter-color: var(--hd-white)
   codemirror-gutters-background-color: var(--hd-white)
   codemirror-linenumber-color: var(--hd-grey)
   codemirror-cursor: var(--hd-black)
-  codemirror-selected: "#FFD700"
+  codemirror-selected: "#FFFF00"
   codemirror-meta: "#000000"
   codemirror-property: "#7A0000"
   codemirror-keyword: "#B00000"
@@ -388,64 +417,65 @@ hotdog-stand-theme:
   # 15. MATERIAL 3 SYSTEM TOKENS  (--md-sys-color-*)
   #     The modern gap: newer buttons/dialogs/menus/chips read these. Every
   #     `on-*` value is the foreground drawn ON the matching surface.
-  #     Surfaces are red (on -> white); primary/secondary/tertiary are the
-  #     interactive yellow (on -> black); outlines are black.
+  #     Surfaces are yellow (on -> black); the interactive primary/secondary/
+  #     tertiary accents are RED (on -> white); high-elevation containers
+  #     (menus / dialogs) are white (on -> black); outlines are black.
   # ---------------------------------------------------------------------------
-  md-sys-color-primary: var(--hd-yellow)
-  md-sys-color-on-primary: var(--hd-black)
+  md-sys-color-primary: var(--hd-red)
+  md-sys-color-on-primary: var(--hd-white)
   md-sys-color-primary-container: var(--hd-red-dk)
   md-sys-color-on-primary-container: var(--hd-white)
-  md-sys-color-inverse-primary: var(--hd-red)
+  md-sys-color-inverse-primary: var(--hd-yellow)
 
-  md-sys-color-secondary: var(--hd-yellow)
-  md-sys-color-on-secondary: var(--hd-black)
-  md-sys-color-secondary-container: var(--hd-red-dk)
+  md-sys-color-secondary: var(--hd-red)
+  md-sys-color-on-secondary: var(--hd-white)
+  md-sys-color-secondary-container: var(--hd-red)
   md-sys-color-on-secondary-container: var(--hd-white)
 
-  md-sys-color-tertiary: var(--hd-yellow)
-  md-sys-color-on-tertiary: var(--hd-black)
-  md-sys-color-tertiary-container: var(--hd-red-dk)
+  md-sys-color-tertiary: var(--hd-red)
+  md-sys-color-on-tertiary: var(--hd-white)
+  md-sys-color-tertiary-container: var(--hd-red)
   md-sys-color-on-tertiary-container: var(--hd-white)
 
-  md-sys-color-surface: var(--hd-red)
-  md-sys-color-on-surface: var(--hd-white)
-  md-sys-color-surface-variant: var(--hd-red)
-  md-sys-color-on-surface-variant: var(--hd-white)
-  md-sys-color-surface-tint: var(--hd-red)
-  md-sys-color-surface-dim: var(--hd-red-dk)
-  md-sys-color-surface-bright: var(--hd-red)
-  md-sys-color-surface-container-lowest: var(--hd-red-dk)
-  md-sys-color-surface-container-low: var(--hd-red)
-  md-sys-color-surface-container: var(--hd-red)
-  md-sys-color-surface-container-high: var(--hd-red)
-  md-sys-color-surface-container-highest: var(--hd-red)
+  md-sys-color-surface: var(--hd-yellow)
+  md-sys-color-on-surface: var(--hd-black)
+  md-sys-color-surface-variant: var(--hd-yellow)
+  md-sys-color-on-surface-variant: var(--hd-black)
+  md-sys-color-surface-tint: var(--hd-yellow)
+  md-sys-color-surface-dim: var(--hd-yellow-dk)
+  md-sys-color-surface-bright: var(--hd-yellow)
+  md-sys-color-surface-container-lowest: var(--hd-yellow)
+  md-sys-color-surface-container-low: var(--hd-yellow)
+  md-sys-color-surface-container: var(--hd-white)
+  md-sys-color-surface-container-high: var(--hd-white)
+  md-sys-color-surface-container-highest: var(--hd-white)
 
-  md-sys-color-background: var(--hd-red)
-  md-sys-color-on-background: var(--hd-white)
+  md-sys-color-background: var(--hd-yellow)
+  md-sys-color-on-background: var(--hd-black)
 
   md-sys-color-outline: var(--hd-black)
   md-sys-color-outline-variant: var(--hd-black)
 
-  md-sys-color-error: var(--hd-yellow)
-  md-sys-color-on-error: var(--hd-black)
+  md-sys-color-error: var(--hd-black)
+  md-sys-color-on-error: var(--hd-yellow)
   md-sys-color-error-container: var(--hd-red-dk)
   md-sys-color-on-error-container: var(--hd-white)
 
   md-sys-color-inverse-surface: var(--hd-black)
   md-sys-color-inverse-on-surface: var(--hd-yellow)
 
-  md-sys-color-primary-fixed: var(--hd-yellow)
-  md-sys-color-primary-fixed-dim: var(--hd-yellow)
-  md-sys-color-on-primary-fixed: var(--hd-black)
-  md-sys-color-on-primary-fixed-variant: var(--hd-black)
-  md-sys-color-secondary-fixed: var(--hd-yellow)
-  md-sys-color-secondary-fixed-dim: var(--hd-yellow)
-  md-sys-color-on-secondary-fixed: var(--hd-black)
-  md-sys-color-on-secondary-fixed-variant: var(--hd-black)
-  md-sys-color-tertiary-fixed: var(--hd-yellow)
-  md-sys-color-tertiary-fixed-dim: var(--hd-yellow)
-  md-sys-color-on-tertiary-fixed: var(--hd-black)
-  md-sys-color-on-tertiary-fixed-variant: var(--hd-black)
+  md-sys-color-primary-fixed: var(--hd-red)
+  md-sys-color-primary-fixed-dim: var(--hd-red-dk)
+  md-sys-color-on-primary-fixed: var(--hd-white)
+  md-sys-color-on-primary-fixed-variant: var(--hd-white)
+  md-sys-color-secondary-fixed: var(--hd-red)
+  md-sys-color-secondary-fixed-dim: var(--hd-red-dk)
+  md-sys-color-on-secondary-fixed: var(--hd-white)
+  md-sys-color-on-secondary-fixed-variant: var(--hd-white)
+  md-sys-color-tertiary-fixed: var(--hd-red)
+  md-sys-color-tertiary-fixed-dim: var(--hd-red-dk)
+  md-sys-color-on-tertiary-fixed: var(--hd-white)
+  md-sys-color-on-tertiary-fixed-variant: var(--hd-white)
 
   md-sys-color-shadow: var(--hd-black)
   md-sys-color-scrim: var(--hd-black)
@@ -453,19 +483,19 @@ hotdog-stand-theme:
   # ---------------------------------------------------------------------------
   # 16. LEGACY MDC THEME ALIASES  (--mdc-theme-*)
   # ---------------------------------------------------------------------------
-  mdc-theme-primary: var(--hd-yellow)
-  mdc-theme-on-primary: var(--hd-black)
-  mdc-theme-secondary: var(--hd-yellow)
-  mdc-theme-on-secondary: var(--hd-black)
-  mdc-theme-surface: var(--hd-red)
-  mdc-theme-on-surface: var(--hd-white)
-  mdc-theme-background: var(--hd-red)
-  mdc-theme-error: var(--hd-yellow)
-  mdc-theme-text-primary-on-background: var(--hd-white)
-  mdc-theme-text-secondary-on-background: var(--hd-white)
-  mdc-theme-text-hint-on-background: var(--hd-white)
+  mdc-theme-primary: var(--hd-red)
+  mdc-theme-on-primary: var(--hd-white)
+  mdc-theme-secondary: var(--hd-red)
+  mdc-theme-on-secondary: var(--hd-white)
+  mdc-theme-surface: var(--hd-yellow)
+  mdc-theme-on-surface: var(--hd-black)
+  mdc-theme-background: var(--hd-yellow)
+  mdc-theme-error: var(--hd-red)
+  mdc-theme-text-primary-on-background: var(--hd-black)
+  mdc-theme-text-secondary-on-background: var(--hd-black)
+  mdc-theme-text-hint-on-background: var(--hd-black)
   mdc-theme-text-disabled-on-background: var(--hd-grey)
-  mdc-theme-text-icon-on-background: var(--hd-white)
+  mdc-theme-text-icon-on-background: var(--hd-black)
 
   # ===== HA 2026 semantic color tokens (--ha-color-*) =====
   # HA 2026.7 introduced a new semantic design-token layer, --ha-color-*, that
@@ -474,24 +504,22 @@ hotdog-stand-theme:
   # to HA's default teal/grey palette (e.g. switch "on" was cyan #009AC7).
   # In a themes file these are set WITHOUT the leading `--`.
   #
-  # NOTE: form/input backgrounds ARE set to red (verified live) so the pickers'
-  # white value text (inherited from --ha-color-text-primary) reads correctly;
-  # they were previously white-on-light. Paired with the transparent-fill /
-  # white-ink MDC + legacy input overrides in the input section above.
-  ha-color-form-background: var(--hd-red)
-  ha-color-form-background-hover: "#D40000"
-  ha-color-form-background-disabled: var(--hd-red-dk)
+  # Form/input backgrounds -> yellow (the card body) so the pickers' value text
+  # (inherited from --ha-color-text-primary, now BLACK) reads black-on-yellow.
+  ha-color-form-background: var(--hd-yellow)
+  ha-color-form-background-hover: var(--hd-yellow-dk)
+  ha-color-form-background-disabled: "#D9D9D9"
 
   # ROLE FILLS — IMPORTANT: for the `normal` and `quiet` prominences the fill
-  # color ALSO doubles as plain/outlined button TEXT drawn on the red page
+  # color ALSO doubles as plain/outlined button TEXT drawn on the yellow page
   # (Web Awesome renders the fill color as the label color), so those must be
-  # dark (red-dk) with a WHITE `on-*` — never a white fill. Only the `-loud`
-  # prominence is a real filled surface: primary-loud stays yellow (black text);
-  # danger/warning/success-loud stay black (yellow text); neutral is unchanged.
+  # dark (red-dk) on the yellow body. Only the `-loud` prominence is a real
+  # filled surface: primary-loud = red (white text); danger/warning/success-loud
+  # = black (yellow text); neutral-loud = black (white text).
   # primary role
-  ha-color-fill-primary-loud-resting: var(--hd-yellow)
-  ha-color-fill-primary-loud-hover: "#E6C200"
-  ha-color-fill-primary-loud-active: "#E6C200"
+  ha-color-fill-primary-loud-resting: var(--hd-red)
+  ha-color-fill-primary-loud-hover: "#D40000"
+  ha-color-fill-primary-loud-active: var(--hd-red-dk)
   ha-color-fill-primary-normal-resting: var(--hd-red-dk)
   ha-color-fill-primary-normal-hover: "#8F0000"
   ha-color-fill-primary-normal-active: var(--hd-red-dk)
@@ -501,7 +529,7 @@ hotdog-stand-theme:
   ha-color-border-primary-loud: var(--hd-black)
   ha-color-border-primary-normal: var(--hd-black)
   ha-color-border-primary-quiet: var(--hd-black)
-  ha-color-on-primary-loud: var(--hd-black)
+  ha-color-on-primary-loud: var(--hd-white)
   ha-color-on-primary-normal: var(--hd-white)
   ha-color-on-primary-quiet: var(--hd-white)
 
@@ -523,7 +551,7 @@ hotdog-stand-theme:
   ha-color-on-neutral-quiet: var(--hd-white)
 
   # status roles danger/warning/success -> loud black + yellow (caution-tape),
-  # normal/quiet white + black
+  # normal/quiet dark-red + white
   ha-color-fill-danger-loud-resting: var(--hd-black)
   ha-color-fill-danger-loud-hover: "#1A1A1A"
   ha-color-fill-danger-loud-active: var(--hd-black)
@@ -570,45 +598,45 @@ hotdog-stand-theme:
   ha-color-on-success-normal: var(--hd-white)
   ha-color-on-success-quiet: var(--hd-white)
 
-  # surfaces -> red family (white text); inverted -> black (toasts/tooltips)
-  ha-color-surface-default: var(--hd-red)
-  ha-color-surface-low: "#D40000"
-  ha-color-surface-lower: var(--hd-red-dk)
+  # surfaces -> yellow family (black text); inverted -> black (toasts/tooltips)
+  ha-color-surface-default: var(--hd-yellow)
+  ha-color-surface-low: var(--hd-yellow-dk)
+  ha-color-surface-lower: var(--hd-yellow)
   ha-color-surface-default-inverted: var(--hd-black)
   ha-color-surface-low-inverted: "#141414"
   ha-color-surface-lower-inverted: var(--hd-black)
-  ha-color-on-surface-default: var(--hd-white)
+  ha-color-on-surface-default: var(--hd-black)
 
   # text
-  ha-color-text-primary: var(--hd-white)
-  ha-color-text-secondary: var(--hd-white)
-  ha-color-text-disabled: "#E0B3B3"
-  ha-color-text-link: var(--hd-yellow)
+  ha-color-text-primary: var(--hd-black)
+  ha-color-text-secondary: var(--hd-black)
+  ha-color-text-disabled: "#6E6E6E"
+  ha-color-text-link: var(--hd-red)
   ha-color-text-primary-inverted: var(--hd-white)
   ha-color-text-secondary-inverted: "#E0E0E0"
 
-  # focus ring
-  ha-color-focus: var(--hd-yellow)
+  # focus ring -> black so it reads on BOTH the yellow body and the red chrome
+  # (a yellow ring vanished on the yellow cards).
+  ha-color-focus: var(--hd-black)
 
-  # ha-switch — pin ON colors directly so the toggle stays yellow track /
-  # black thumb regardless of the primary-role fill (now red-dk, see below).
-  ha-switch-checked-background-color: var(--hd-yellow)
-  ha-switch-checked-background-color-hover: "#E6C200"
-  ha-switch-checked-thumb-background-color: var(--hd-black)
+  # ha-switch — pin colors directly (the primary-role fill is red, but the toggle
+  # should read as a filled black/yellow control on the yellow card).
+  # ON  = black track + yellow thumb.
+  ha-switch-checked-background-color: var(--hd-black)
+  ha-switch-checked-background-color-hover: "#1A1A1A"
+  ha-switch-checked-thumb-background-color: var(--hd-yellow)
   ha-switch-checked-thumb-border-color: var(--hd-black)
   ha-switch-checked-border-color: var(--hd-black)
-  # OFF state: black track + white thumb (high contrast on the red card). The
-  # default off track was near-white (#f3f3f3) with a white thumb — washed out.
-  ha-switch-background-color: var(--hd-black)
-  ha-switch-background-color-hover: "#1A1A1A"
-  ha-switch-thumb-background-color: var(--hd-white)
+  # OFF = white track + black thumb (empty box) — high contrast on the yellow card.
+  ha-switch-background-color: var(--hd-white)
+  ha-switch-background-color-hover: "#E6E6E6"
+  ha-switch-thumb-background-color: var(--hd-black)
   ha-switch-thumb-border-color: var(--hd-black)
-  # DISABLED: dim it so disabled toggles are visually distinct from off (default
-  # gave them no dimming, so disabled looked identical to a normal off switch).
+  # DISABLED: dim it so disabled toggles are visually distinct from off.
   ha-switch-disabled-opacity: "0.45"
 
   # ===========================================================================
-  # 18. BOXY INPUTS  (classic Hot Dog Stand look — square corners + search box)
+  # 18. BOXY INPUTS + CARD-MOD  (square corners, red title bars, Windows buttons)
   # ===========================================================================
   # Square corners everywhere via plain variables (robust; these cascade into
   # shadow DOM). Win 3.1 controls were hard rectangles, never rounded.
@@ -639,17 +667,15 @@ hotdog-stand-theme:
   ha-border-radius-circle: "0"
   ha-border-radius-pill: "0"
 
-  # card-mod: hard black box border on the config-page search box — the one
-  # high-value input a variables-only theme cannot border (Material/Web-Awesome
-  # inputs hardcode border:none). Requires card-mod installed as a FRONTEND
-  # MODULE (configuration.yaml -> frontend.extra_module_url).
+  # --- card-mod (frontend module; see configuration.yaml -> extra_module_url) --
   #   * value MUST be a | STRING of card-mod YAML — a real YAML map => reload 500
   #   * "$" descends into an element's shadow root; "*$" into all children
-  #   * border the INNER wa-input::part(base), not the host (host border hidden)
-  # Scope is deliberately minimal: text-field / picker / dialog pierces were
-  # dropped as too fragile (they break on HA frontend DOM changes) and pickers
-  # cannot be bordered at all (a card-mod 4.2.1 localize bug aborts the page).
+  #   * the "." key is CSS for the current root
   card-mod-theme: hotdog-stand-theme
+
+  # Config-page search box gets a hard black border (the one high-value input a
+  # variables-only theme cannot border — Material/Web-Awesome inputs hardcode
+  # border:none). Config "Add / Ignore" buttons -> grey Windows buttons.
   card-mod-config-yaml: |
     "*$":
       "hass-tabs-subpage-data-table$":
@@ -676,34 +702,54 @@ hotdog-stand-theme:
           border: 2px outset #C0C0C0 !important;
           border-radius: 0 !important;
         }
-  # Sidebar (card-mod): HA hardcodes body{font-family:Roboto...} (not a
-  # variable) and the sidebar inherits it, so the theme's font vars don't reach
-  # it — force the pixel font on the sidebar host here. (The bundled font loader
-  # /local/hotdog-font.js also sets body{font-family} document-wide for all
-  # other chrome; this covers the sidebar instantly on theme reload.)
-  # Also kill the subtle yellow tint overlay on the selected item (low-opacity
-  # ::before) — the selected item stays obvious via its yellow text + icon.
-  # And flatten the hover/focus background changes: null the ripple/hover state
-  # layer (--ha-ripple-color) and the focus fill (--ha-list-item-focus-background)
-  # so menu items don't get a background wash — the yellow focus OUTLINE stays
-  # (that's --ha-color-focus, untouched).
+  # Sidebar (card-mod): HA hardcodes body{font-family:Roboto...} (not a variable)
+  # and the sidebar inherits it, so the theme's font vars don't reach it — force
+  # the pixel font on the sidebar host. Also kill the selected-item tint overlay
+  # and flatten hover/focus background washes (the yellow focus OUTLINE stays).
   card-mod-sidebar-yaml: |
     ".": |
       :host { font-family: var(--hd-font) !important; }
+      /* The "Home Assistant" sidebar title draws from --primary-text-color
+         (now black); force all sidebar chrome text white on the red panel. */
+      :host { --primary-text-color: #FFFFFF !important; --secondary-text-color: #FFFFFF !important; }
+      .title { color: #FFFFFF !important; }
       ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
       ha-list-item-button {
         --ha-list-item-focus-background: transparent !important;
         --ha-ripple-color: transparent !important;
       }
-  # Tile/area control buttons -> classic Windows 3.1 buttons: silver face, black
-  # icon, raised bevel (border:outset). The ha-control-button component redefines
-  # its color vars on :host, so plain theme tokens can't reach it — card-mod sets
-  # the host style directly (no shadow-pierce needed: outset border + host bg +
-  # the icon-color var flatten it, incl. the entity-colored 'on' light buttons).
-  # Applied per-card (card-mod-card runs on every card); the descent no-ops on
-  # cards without control-button features. May need updating after major HA
-  # dashboard DOM changes.
+  # Per-card styling (card-mod-card runs on every card):
+  #   1. The card HEADER becomes a classic red Windows title bar — red strip,
+  #      white text, black bottom rule dividing it from the yellow body. Targets
+  #      the card's own .card-header / .header (light DOM inside the card shadow).
+  #   2. Tile/area control buttons -> silver Windows buttons (raised bevel, black
+  #      icon). The ha-control-button component redefines its color vars on :host,
+  #      so card-mod sets the host style directly. The descent no-ops on cards
+  #      without control-button features. May need updating after major HA
+  #      dashboard DOM changes.
   card-mod-card-yaml: |
+    ".": |
+      .card-header, .header, h1.card-header {
+        background: #FF0000 !important;
+        color: #FFFFFF !important;
+        margin: 0 0 8px 0 !important;
+        padding: 6px 16px !important;
+        border-bottom: 5px solid #000000 !important;
+      }
+      /* Media-control card hardcodes white text (built for album-art/colored
+         panels); on the yellow card body that was white-on-yellow. Paint its
+         player area red so the white text/controls read white-on-red. */
+      .player { background: #FF0000 !important; }
+      .player, .player .icon-name, .player .top-info, .player .title,
+      .player .artist, .player .current-time, .player .total-time {
+        color: #FFFFFF !important;
+      }
+      /* count badge on the player's group/join button -> black pill, yellow text */
+      .player .badge {
+        background: #000000 !important;
+        color: #FFFF00 !important;
+        border-color: #FFFF00 !important;
+      }
     "hui-card-features$":
       "hui-card-feature$":
         "*$":
