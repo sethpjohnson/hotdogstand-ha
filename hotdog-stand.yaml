@@ -76,6 +76,16 @@ hotdog-stand-theme:
   disabled-color: var(--hd-grey)
   disabled-text-color: var(--hd-grey)
   scrollbar-thumb-color: var(--hd-black)
+  # No hover/press ripple tint anywhere — clickable cards/tiles washed slightly
+  # grey on hover (a modern state layer). Win 3.1 had no such effect. Tiles
+  # override the ripple COLOR but not its OPACITY, so forcing every ripple
+  # hover/pressed opacity to 0 (these inherit through shadow DOM) kills the wash
+  # regardless of the local color.
+  ha-ripple-color: transparent
+  ha-ripple-hover-opacity: "0"
+  ha-ripple-pressed-opacity: "0"
+  md-ripple-hover-opacity: "0"
+  md-ripple-pressed-opacity: "0"
 
   # ---------------------------------------------------------------------------
   # 2. TEXT COLORS  (default surface is now yellow -> black text)
@@ -133,17 +143,20 @@ hotdog-stand-theme:
   paper-listbox-background-color: var(--hd-white)
 
   # ---------------------------------------------------------------------------
-  # 6. APP HEADER + VIEW TABS / TOOLBAR  (red chrome, white text, yellow active)
+  # 6. APP HEADER + VIEW TABS / TOOLBAR  (BLACK title bar, white text, yellow active)
   # ---------------------------------------------------------------------------
-  app-header-background-color: var(--hd-red)
+  # The top title bar is BLACK (the reference's active-window title-bar color),
+  # not red — white text, yellow active accent. Sidebar nav + card title bars
+  # stay red.
+  app-header-background-color: var(--hd-black)
   app-header-text-color: var(--hd-white)
   app-header-selection-bar-color: var(--hd-yellow)
   app-header-edit-background-color: var(--hd-red-dk)
   app-header-edit-text-color: var(--hd-white)
-  toolbar-background-color: var(--hd-red)
+  toolbar-background-color: var(--hd-black)
   header-height: 56px
 
-  # top view tabs (mwc/mdc tab bar) — on the red header: white text, yellow active
+  # top view tabs (mwc/mdc tab bar) — on the black header: white text, yellow active
   mdc-tab-text-label-color-default: var(--hd-white)
   mdc-tab-color-default: var(--hd-white)
   ha-tab-active-text-color: var(--hd-yellow)
@@ -675,13 +688,13 @@ hotdog-stand-theme:
   #   * the "." key is CSS for the current root
   card-mod-theme: hotdog-stand-theme
 
-  # Thick black frame under the red top title bar, separating it from the yellow
-  # desktop (was a 1px hairline). card-mod-root styles the lovelace root shadow,
-  # where the header/toolbar live. (Config panels use a different header not
-  # reached here.)
+  # Thick single black rule under the black top title bar, separating it from the
+  # yellow desktop. Target ONLY .toolbar (not .header too) — bordering both drew
+  # a doubled line. card-mod-root styles the lovelace root shadow, where the
+  # header/toolbar live. (Config panels use a different header not reached here.)
   card-mod-root-yaml: |
     ".": |
-      .header, .toolbar, app-header, .mdc-top-app-bar {
+      .toolbar {
         border-bottom: 5px solid #000000 !important;
       }
 
@@ -728,6 +741,12 @@ hotdog-stand-theme:
          (now black); force all sidebar chrome text white on the red panel. */
       :host { --primary-text-color: #FFFFFF !important; --secondary-text-color: #FFFFFF !important; }
       .title { color: #FFFFFF !important; }
+      /* Sidebar TITLE ROW is a BLACK title bar (matches the black top header),
+         with a thick black rule under it separating it from the red nav below. */
+      .menu {
+        background: #000000 !important;
+        border-bottom: 5px solid #000000 !important;
+      }
       ha-list-item-button.selected::before { opacity: 0 !important; background: none !important; }
       ha-list-item-button {
         --ha-list-item-focus-background: transparent !important;
@@ -775,3 +794,15 @@ hotdog-stand-theme:
               --control-button-icon-color: #000000 !important;
               --control-button-background-opacity: 0 !important;
             }
+    # Kill the grey hover/press wash on tile + area cards. ha-ripple hardcodes
+    # --md-ripple-*-opacity: 0.04/0.12 on its OWN :host, shadowing the theme's
+    # root value, so it must be overridden ON the ripple element (inside
+    # ha-tile-container's shadow). No-ops on cards without a tile container.
+    "ha-tile-container$":
+      ".": |
+        ha-ripple {
+          --md-ripple-hover-opacity: 0 !important;
+          --md-ripple-pressed-opacity: 0 !important;
+          --ha-ripple-hover-opacity: 0 !important;
+          --ha-ripple-pressed-opacity: 0 !important;
+        }
