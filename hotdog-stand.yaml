@@ -5,14 +5,15 @@
 #  Loud red / yellow / black. Single flat theme (no light/dark modes) so it
 #  looks identically garish regardless of the viewer's system setting.
 #
-#  YELLOW-DOMINANT layout (matches the real scheme — the desktop and window
-#  client areas were yellow; red was the chrome/title-bar accent):
-#    * PAGE + CARD BODIES  -> yellow   (text/icons -> BLACK)
+#  Layout (yellow desktop, white windows, red chrome — the classic Win 3.1 look):
+#    * PAGE / DESKTOP      -> yellow   (behind the cards)
+#    * CARD / WINDOW BODIES -> white   (text/icons -> BLACK)
 #    * CHROME: app header, sidebar, card TITLE BARS -> red (text -> WHITE;
-#      yellow for the active tab/selection accent)
+#      yellow for the active tab/selection accent). Sidebar + header are framed
+#      off the desktop with a thick 5px black edge (see card-mod-root/-sidebar).
 #    * INVERSE: toasts / tooltips / chips / badges -> black (text -> YELLOW)
 #    * DROPDOWN MENUS -> white (text -> BLACK; selected row = red bar, white)
-#    * INPUTS -> transparent on the yellow body, BLACK ink, hard BLACK border
+#    * INPUTS -> transparent on the white body, BLACK ink, hard BLACK border
 #
 #  THE CONTRAST RULE (enforced on every foreground/background pairing):
 #    Allowed ONLY:  black-on-yellow · white-on-red · yellow-on-black ·
@@ -86,11 +87,11 @@ hotdog-stand-theme:
   text-medium-emphasis-color: var(--hd-black)
 
   # ---------------------------------------------------------------------------
-  # 3. BACKGROUNDS  (all yellow — the desktop + window client areas)
+  # 3. BACKGROUNDS  (yellow desktop behind the cards; card bodies are white)
   # ---------------------------------------------------------------------------
   primary-background-color: var(--hd-yellow)
   secondary-background-color: var(--hd-yellow)
-  card-background-color: var(--hd-yellow)
+  card-background-color: var(--hd-white)
   lovelace-background: var(--hd-yellow)
   clear-background-color: var(--hd-yellow)
 
@@ -112,13 +113,14 @@ hotdog-stand-theme:
   rgb-info-color: 255, 0, 0
 
   # ---------------------------------------------------------------------------
-  # 5. CARDS  (yellow body, thick black frame, NO shadow, red title bar)
+  # 5. CARDS  (white body, thick black frame, NO shadow, red title bar)
   # ---------------------------------------------------------------------------
-  # Windows 3.1 had no drop shadows -> box-shadow: none (flat). The 5px black
-  # border is the "active window" thick frame. The red title-bar strip + its
-  # white header text are painted by card-mod-card (section 18); the header-color
-  # token below is the white text that sits on that red strip.
-  ha-card-background: var(--hd-yellow)
+  # White window bodies on the yellow desktop. Windows 3.1 had no drop shadows
+  # -> box-shadow: none (flat). The 5px black border is the "active window" thick
+  # frame. The red title-bar strip + its white header text are painted by
+  # card-mod-card (section 18); the header-color token below is the white text
+  # that sits on that red strip.
+  ha-card-background: var(--hd-white)
   ha-card-border-color: var(--hd-black)
   ha-card-border-width: 5px
   ha-card-border-radius: 0px
@@ -126,7 +128,7 @@ hotdog-stand-theme:
   ha-card-header-color: var(--hd-white)
   ha-card-header-font-size: 24px
   ha-card-state-icon-color: var(--hd-black)
-  paper-card-background-color: var(--hd-yellow)
+  paper-card-background-color: var(--hd-white)
   paper-card-header-color: var(--hd-white)
   paper-listbox-background-color: var(--hd-white)
 
@@ -225,7 +227,7 @@ hotdog-stand-theme:
   rgb-primary-text-color: 0, 0, 0
   rgb-secondary-text-color: 0, 0, 0
   rgb-text-primary-color: 0, 0, 0
-  rgb-card-background-color: 255, 255, 0
+  rgb-card-background-color: 255, 255, 255
   rgb-primary-background-color: 255, 255, 0
   rgb-secondary-background-color: 255, 255, 0
   rgb-disabled-text-color: 128, 128, 128
@@ -290,7 +292,7 @@ hotdog-stand-theme:
   mdc-dialog-scrim-color: rgba(0, 0, 0, 0.6)
   dialog-backdrop-filter: none
   ha-dialog-border-radius: 0px
-  ha-dialog-surface-background: var(--hd-yellow)
+  ha-dialog-surface-background: var(--hd-white)
   more-info-header-background: var(--hd-red)
   more-info-header-color: var(--hd-white)
 
@@ -298,18 +300,18 @@ hotdog-stand-theme:
   # 11. SWITCHES / TOGGLES / SLIDERS  (sit on the yellow card body)
   # ---------------------------------------------------------------------------
   # Switch ON  = black track + yellow thumb (filled, obvious).
-  # Switch OFF = white track + black thumb (empty box) — both read on yellow.
+  # Switch OFF = silver track + black thumb (empty box) — reads on the white card.
   switch-checked-color: var(--hd-yellow)
   switch-checked-button-color: var(--hd-yellow)
   switch-checked-track-color: var(--hd-black)
   switch-unchecked-color: var(--hd-black)
   switch-unchecked-button-color: var(--hd-black)
-  switch-unchecked-track-color: var(--hd-white)
+  switch-unchecked-track-color: "#B0B0B0"
 
   paper-toggle-button-checked-button-color: var(--hd-yellow)
   paper-toggle-button-checked-bar-color: var(--hd-black)
   paper-toggle-button-unchecked-button-color: var(--hd-black)
-  paper-toggle-button-unchecked-bar-color: var(--hd-white)
+  paper-toggle-button-unchecked-bar-color: "#B0B0B0"
 
   # ha-slider / md-slider / legacy paper-slider — black track (reads on yellow),
   # red fill/knob (active accent on yellow).
@@ -386,7 +388,7 @@ hotdog-stand-theme:
   # (yellow card), so a white chip background gives readable black-on-white. (The
   # code EDITOR above stays white too — it sets its own dark syntax colors via
   # the codemirror-* tokens below.)
-  markdown-code-background-color: var(--hd-white)
+  markdown-code-background-color: "#D9D9D9"
   code-editor-gutter-color: var(--hd-white)
   codemirror-gutters-background-color: var(--hd-white)
   codemirror-linenumber-color: var(--hd-grey)
@@ -437,15 +439,15 @@ hotdog-stand-theme:
   md-sys-color-tertiary-container: var(--hd-red)
   md-sys-color-on-tertiary-container: var(--hd-white)
 
-  md-sys-color-surface: var(--hd-yellow)
+  md-sys-color-surface: var(--hd-white)
   md-sys-color-on-surface: var(--hd-black)
-  md-sys-color-surface-variant: var(--hd-yellow)
+  md-sys-color-surface-variant: var(--hd-white)
   md-sys-color-on-surface-variant: var(--hd-black)
-  md-sys-color-surface-tint: var(--hd-yellow)
-  md-sys-color-surface-dim: var(--hd-yellow-dk)
-  md-sys-color-surface-bright: var(--hd-yellow)
-  md-sys-color-surface-container-lowest: var(--hd-yellow)
-  md-sys-color-surface-container-low: var(--hd-yellow)
+  md-sys-color-surface-tint: var(--hd-white)
+  md-sys-color-surface-dim: var(--hd-white)
+  md-sys-color-surface-bright: var(--hd-white)
+  md-sys-color-surface-container-lowest: var(--hd-white)
+  md-sys-color-surface-container-low: var(--hd-white)
   md-sys-color-surface-container: var(--hd-white)
   md-sys-color-surface-container-high: var(--hd-white)
   md-sys-color-surface-container-highest: var(--hd-white)
@@ -487,7 +489,7 @@ hotdog-stand-theme:
   mdc-theme-on-primary: var(--hd-white)
   mdc-theme-secondary: var(--hd-red)
   mdc-theme-on-secondary: var(--hd-white)
-  mdc-theme-surface: var(--hd-yellow)
+  mdc-theme-surface: var(--hd-white)
   mdc-theme-on-surface: var(--hd-black)
   mdc-theme-background: var(--hd-yellow)
   mdc-theme-error: var(--hd-red)
@@ -506,8 +508,8 @@ hotdog-stand-theme:
   #
   # Form/input backgrounds -> yellow (the card body) so the pickers' value text
   # (inherited from --ha-color-text-primary, now BLACK) reads black-on-yellow.
-  ha-color-form-background: var(--hd-yellow)
-  ha-color-form-background-hover: var(--hd-yellow-dk)
+  ha-color-form-background: var(--hd-white)
+  ha-color-form-background-hover: var(--hd-white)
   ha-color-form-background-disabled: "#D9D9D9"
 
   # ROLE FILLS — IMPORTANT: for the `normal` and `quiet` prominences the fill
@@ -599,9 +601,9 @@ hotdog-stand-theme:
   ha-color-on-success-quiet: var(--hd-white)
 
   # surfaces -> yellow family (black text); inverted -> black (toasts/tooltips)
-  ha-color-surface-default: var(--hd-yellow)
-  ha-color-surface-low: var(--hd-yellow-dk)
-  ha-color-surface-lower: var(--hd-yellow)
+  ha-color-surface-default: var(--hd-white)
+  ha-color-surface-low: var(--hd-white)
+  ha-color-surface-lower: var(--hd-white)
   ha-color-surface-default-inverted: var(--hd-black)
   ha-color-surface-low-inverted: "#141414"
   ha-color-surface-lower-inverted: var(--hd-black)
@@ -627,9 +629,9 @@ hotdog-stand-theme:
   ha-switch-checked-thumb-background-color: var(--hd-yellow)
   ha-switch-checked-thumb-border-color: var(--hd-black)
   ha-switch-checked-border-color: var(--hd-black)
-  # OFF = white track + black thumb (empty box) — high contrast on the yellow card.
-  ha-switch-background-color: var(--hd-white)
-  ha-switch-background-color-hover: "#E6E6E6"
+  # OFF = silver track + black thumb (empty box) — visible on the white card body.
+  ha-switch-background-color: "#B0B0B0"
+  ha-switch-background-color-hover: "#A0A0A0"
   ha-switch-thumb-background-color: var(--hd-black)
   ha-switch-thumb-border-color: var(--hd-black)
   # DISABLED: dim it so disabled toggles are visually distinct from off.
@@ -673,6 +675,16 @@ hotdog-stand-theme:
   #   * the "." key is CSS for the current root
   card-mod-theme: hotdog-stand-theme
 
+  # Thick black frame under the red top title bar, separating it from the yellow
+  # desktop (was a 1px hairline). card-mod-root styles the lovelace root shadow,
+  # where the header/toolbar live. (Config panels use a different header not
+  # reached here.)
+  card-mod-root-yaml: |
+    ".": |
+      .header, .toolbar, app-header, .mdc-top-app-bar {
+        border-bottom: 5px solid #000000 !important;
+      }
+
   # Config-page search box gets a hard black border (the one high-value input a
   # variables-only theme cannot border — Material/Web-Awesome inputs hardcode
   # border:none). Config "Add / Ignore" buttons -> grey Windows buttons.
@@ -709,6 +721,9 @@ hotdog-stand-theme:
   card-mod-sidebar-yaml: |
     ".": |
       :host { font-family: var(--hd-font) !important; }
+      /* Thick black frame separating the red side menu from the yellow desktop
+         (was a 1px hairline) — matches the window-frame weight. */
+      :host { border-right: 5px solid #000000 !important; }
       /* The "Home Assistant" sidebar title draws from --primary-text-color
          (now black); force all sidebar chrome text white on the red panel. */
       :host { --primary-text-color: #FFFFFF !important; --secondary-text-color: #FFFFFF !important; }
