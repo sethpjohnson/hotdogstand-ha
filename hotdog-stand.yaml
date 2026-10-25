@@ -51,6 +51,10 @@ hotdog-stand-theme:
   # Windows 3.1 "MS Sans Serif" look via the pixelated webfont (loaded document-
   # wide by /local/hotdog-font.js — see frontend.extra_module_url). Falls back to
   # real MS Sans Serif on Windows, then Tahoma/Geneva. Code stays monospace.
+  # Sentinel read by /local/hotdog-font.js: the loader only applies its body font,
+  # grey buttons and black panel headers while this var is set on <html>, so other
+  # themes are left untouched. Not a color; do not remove.
+  hd-theme-active: "1"
   hd-font: "'Pixelated MS Sans Serif', 'MS Sans Serif', Tahoma, Geneva, sans-serif"
   ha-font-family-body: var(--hd-font)
   ha-font-family-heading: var(--hd-font)
